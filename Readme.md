@@ -41,3 +41,17 @@ package.json
 ```
 pnpm exec prisma init --datasource-provider postgresql --output ../generated/prisma
 ```
+
+## Prisma First Migration
+
+Create your first migration to set up the database tables:
+
+```
+pnpm exec prisma migrate dev --name init
+```
+
+Run the following command to generate the Prisma Client:
+
+```
+pnpm exec prisma generate
+```

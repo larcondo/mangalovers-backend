@@ -1,8 +1,6 @@
 import "dotenv/config";
-import { ApolloServer } from "@apollo/server";
+import { server } from "./server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { typeDefs } from "./schema";
-import { resolvers } from "./resolvers";
 
 if (!process.env.PORT) {
   console.error("Error: Environment Variable PORT is not defined!");
@@ -10,11 +8,6 @@ if (!process.env.PORT) {
 }
 
 const PORT = Number(process.env.PORT);
-
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
 
 startStandaloneServer(server, {
   listen: {

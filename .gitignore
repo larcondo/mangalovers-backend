@@ -4,3 +4,6 @@ build
 .env
 *.env
 /generated/prisma
+
+*.local
+*.local.*

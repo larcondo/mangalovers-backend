@@ -15,3 +15,7 @@ export interface CreateUserArgs {
   password: string;
   email: string;
 }
+
+export interface Authorization {
+  currentUser: UserJWTPayload | null;
+}

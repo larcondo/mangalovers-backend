@@ -1,9 +1,9 @@
 import { prisma } from "src/prisma";
-import { GraphQLError } from "graphql";
 import { JWTService } from "src/services/jwt";
 import { LoginArgs } from "src/types/user";
 import { AuthService } from "src/services/auth";
 import { handleMutationError } from "src/helpers/mutationErrors";
+import { AuthenticationError } from "src/helpers/auth";
 
 const login = async (_: any, { username, password }: LoginArgs) => {
   try {
@@ -14,12 +14,10 @@ const login = async (_: any, { username, password }: LoginArgs) => {
     });
 
     if (!user)
-      throw new GraphQLError(`User ${username} does't exists.`, {
-        extensions: {
-          code: "UNAUTHENTICATED",
-          argumentName: "username",
-        },
-      });
+      throw new AuthenticationError(
+        `User ${username} does't exists.`,
+        "usernanme",
+      );
 
     // Verifico si el password es válido
     const isValidPassword = await AuthService.comparePassword(
@@ -28,12 +26,7 @@ const login = async (_: any, { username, password }: LoginArgs) => {
     );
 
     if (!isValidPassword) {
-      throw new GraphQLError("Wrong password. Try again.", {
-        extensions: {
-          code: "UNAUTHENTICATED",
-          argumentName: "password",
-        },
-      });
+      throw new AuthenticationError("Wrong password. Try again.", "password");
     }
 
     // Creo el accessToken

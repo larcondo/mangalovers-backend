@@ -10,10 +10,12 @@ export const handleMutationError = (
   }
 
   if (err instanceof GraphQLError) {
-    throw new GraphQLError(err.message, {
-      extensions: { code: err.extensions.code },
-    });
+    throw err;
   } else {
-    throw new GraphQLError(message);
+    throw new GraphQLError(message, {
+      extensions: {
+        code: "INTERNAL_SERVER_ERROR",
+      },
+    });
   }
 };

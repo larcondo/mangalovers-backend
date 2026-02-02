@@ -1,4 +1,4 @@
-import { Authorization } from "src/types/user";
+import { Authorization } from "@types-app/user";
 import { GraphQLError } from "graphql";
 
 export const verifyUserContext = (context: Authorization) => {

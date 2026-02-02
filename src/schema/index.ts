@@ -3,6 +3,18 @@ export const typeDefs = `
     id: ID!
     username: String!
     password: String!
+    email: String!
+  }
+
+  type UserCreated {
+    username: String!
+    email: String!
+  }
+    
+  type UserLoggedIn {
+    username: String!
+    email: String!
+    accessToken: String!
   }
 
   type Artist {
@@ -24,6 +36,15 @@ export const typeDefs = `
   }
 
   type Mutation {
+    createUser(
+      username: String!
+      password: String!
+      email: String!
+    ): UserCreated
+    login(
+      username: String!
+      password: String!
+    ): UserLoggedIn
     createArtist(name: String!): Artist
     createPublisher(name: String!): Publisher
   }

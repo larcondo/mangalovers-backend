@@ -1,4 +1,6 @@
 export const typeDefs = `
+  scalar Date
+
   type User {
     id: ID!
     username: String!
@@ -22,9 +24,40 @@ export const typeDefs = `
     name: String!
   }
 
+  type PrintFormat {
+    id: ID!
+    name: String!
+    description: String
+  }
+
   type Publisher {
     id: ID!
     name: String!
+  }
+
+  type Author {
+    writer: Artist!
+    illustrator: Artist!
+  }
+
+  type Series {
+    id: ID!
+    name: String!
+    author: Author!
+    publisher: Publisher!
+    printFormat: PrintFormat!
+    urlCover: String
+    isSingleVolume: Boolean
+  }
+
+  type Volume {
+    id: ID!
+    series: Series!
+    number: Int!
+    title: String
+    synopsis: String
+    urlCover: String
+    publicationDate: Date
   }
 
   type Query {

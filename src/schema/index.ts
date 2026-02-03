@@ -1,4 +1,6 @@
-export const typeDefs = `
+export const gql = String.raw;
+
+export const typeDefs = gql`
   scalar Date
 
   type User {
@@ -12,7 +14,7 @@ export const typeDefs = `
     username: String!
     email: String!
   }
-    
+
   type UserLoggedIn {
     username: String!
     email: String!
@@ -64,6 +66,8 @@ export const typeDefs = `
     allUsers: [User]
     allArtists: [Artist]
     artistQty: Int!
+    allPrintFormats: [PrintFormat]
+    printFormatQty: Int!
     allPublishers: [Publisher]
     publisherQty: Int!
   }
@@ -74,11 +78,9 @@ export const typeDefs = `
       password: String!
       email: String!
     ): UserCreated
-    login(
-      username: String!
-      password: String!
-    ): UserLoggedIn
+    login(username: String!, password: String!): UserLoggedIn
     createArtist(name: String!): Artist
     createPublisher(name: String!): Publisher
+    createPrintFormat(name: String!, description: String): PrintFormat
   }
 `;

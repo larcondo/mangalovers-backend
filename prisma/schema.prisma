@@ -25,6 +25,17 @@ model User {
 model Artist {
   id Int @id @default(autoincrement())  // TODO: ver si UUID
   name String @unique
+  illustratedSeries Series[] @relation("IllustratedSeries") // relation
+  writtenSeries Series[] @relation("WrittenSeries") // relation
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PrintFormat {
+  id Int @id @default(autoincrement())  // TODO: ver si UUID
+  name String @unique
+  description String?
+  series Series[] // relation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -32,6 +43,38 @@ model Artist {
 model Publisher {
   id Int @id @default(autoincrement())  // TODO: ver si UUID
   name String @unique
+  publisherSeries Series[] // relation
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Series {
+  id String @id @default(uuid())
+  name String @unique
+  isSingleVolume Boolean @default(false)
+  urlCover String?
+  publisherId Int
+  publisher Publisher @relation(fields: [publisherId], references: [id])
+  printFormatId Int
+  printFormat PrintFormat @relation(fields: [printFormatId], references: [id])
+  illustratorId Int
+  illustrator Artist @relation("IllustratedSeries", fields: [illustratorId], references: [id])
+  writerId Int
+  writer Artist @relation("WrittenSeries", fields: [writerId], references: [id])
+  volumes Volume[] // relation
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Volume {
+  id String @id @default(uuid())
+  number Int
+  title String?
+  urlCover String?
+  synopsis String?
+  publicationDate DateTime?
+  seriesId String
+  series Series @relation(fields: [seriesId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

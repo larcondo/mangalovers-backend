@@ -70,6 +70,8 @@ export const typeDefs = gql`
     printFormatQty: Int!
     allPublishers: [Publisher]
     publisherQty: Int!
+    allSeries: [Series]
+    seriesQty: Int!
   }
 
   type Mutation {
@@ -82,5 +84,14 @@ export const typeDefs = gql`
     createArtist(name: String!): Artist
     createPublisher(name: String!): Publisher
     createPrintFormat(name: String!, description: String): PrintFormat
+    createSeries(
+      name: String!
+      illustratorId: ID!
+      writerId: ID!
+      printFormatId: ID!
+      publisherId: ID!
+      urlCover: String
+      isSingleVolume: Boolean
+    ): Series
   }
 `;

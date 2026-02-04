@@ -14,11 +14,15 @@ import publisherMutations from "./mutation/publisher";
 import printFormatQueries from "./query/printFormat";
 import printFormatMutations from "./mutation/printFormat";
 
+import seriesQueries from "./query/series";
+import seriesMutation from "./mutation/series";
+
 export const resolvers = {
   Query: {
     ...artistQueries,
     ...publisherQueries,
     ...printFormatQueries,
+    ...seriesQueries,
   },
   Date: dateScalar,
   Series: {
@@ -34,5 +38,6 @@ export const resolvers = {
     ...artistMutations,
     ...publisherMutations,
     ...printFormatMutations,
+    ...seriesMutation,
   },
 };

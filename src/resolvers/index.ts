@@ -17,12 +17,16 @@ import printFormatMutations from "./mutation/printFormat";
 import seriesQueries from "./query/series";
 import seriesMutation from "./mutation/series";
 
+import volumeQueries from "./query/volume";
+import volumeMutations from "./mutation/volume";
+
 export const resolvers = {
   Query: {
     ...artistQueries,
     ...publisherQueries,
     ...printFormatQueries,
     ...seriesQueries,
+    ...volumeQueries,
   },
   Date: dateScalar,
   Series: {
@@ -39,5 +43,6 @@ export const resolvers = {
     ...publisherMutations,
     ...printFormatMutations,
     ...seriesMutation,
+    ...volumeMutations,
   },
 };

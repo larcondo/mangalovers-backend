@@ -61,7 +61,7 @@ const createSeries = async (
     console.log(series);
     return series;
   } catch (err) {
-    handleMutationError(err, true, "Crate Series Mutation failed");
+    handleMutationError(err, true, "Create Series Mutation failed");
   }
 };
 

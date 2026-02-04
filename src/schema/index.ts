@@ -72,6 +72,8 @@ export const typeDefs = gql`
     publisherQty: Int!
     allSeries: [Series]
     seriesQty: Int!
+    allVolumes: [Volume]
+    volumeQty: Int!
   }
 
   type Mutation {
@@ -93,5 +95,13 @@ export const typeDefs = gql`
       urlCover: String
       isSingleVolume: Boolean
     ): Series
+    createVolume(
+      seriesId: ID!
+      number: Int!
+      title: String
+      urlCover: String
+      synopsis: String
+      publicationDate: Date
+    ): Volume
   }
 `;

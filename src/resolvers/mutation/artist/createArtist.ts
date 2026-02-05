@@ -1,8 +1,9 @@
 import { prisma } from "@/prisma";
 import { CreateArtistArgs } from "@types-app/artist";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@helpers/auth";
+import { AuthService } from "@services/auth";
 import { handleMutationError } from "@helpers/mutationErrors";
+import { AuthorizationError } from "@/helpers/auth";
 
 const createArtist = async (
   _: any,
@@ -11,7 +12,8 @@ const createArtist = async (
 ) => {
   try {
     // Check if the user is allowed to create
-    verifyUserContext(context);
+    if (!AuthService.isUserAuthorized(context))
+      throw new AuthorizationError("Forbidden action");
 
     const artist = await prisma.artist.create({
       data: {

@@ -2,7 +2,8 @@ import { prisma } from "@/prisma";
 import { CreateVolumeArgs } from "@types-app/volume";
 import { handleMutationError } from "@helpers/mutationErrors";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@helpers/auth";
+import { AuthorizationError } from "@helpers/auth";
+import { AuthService } from "@services/auth";
 import { UserInputError } from "@helpers/clientErrors";
 
 const createVolume = async (
@@ -12,7 +13,8 @@ const createVolume = async (
 ) => {
   try {
     // Check if the user is allowed to create
-    verifyUserContext(context);
+    if (!AuthService.isUserAuthorized(context))
+      throw new AuthorizationError("Forbidden action");
 
     const series = await prisma.series.count({
       where: {

@@ -2,7 +2,8 @@ import { prisma } from "@/prisma";
 import { CreatePrintFormat } from "@types-app/printFormat";
 import { handleMutationError } from "@helpers/mutationErrors";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@helpers/auth";
+import { AuthorizationError } from "@helpers/auth";
+import { AuthService } from "@services/auth";
 
 const createPrintFormat = async (
   _: any,
@@ -11,7 +12,8 @@ const createPrintFormat = async (
 ) => {
   try {
     // Check if the user is allowed to create
-    verifyUserContext(context);
+    if (!AuthService.isUserAuthorized(context))
+      throw new AuthorizationError("Forbidden action");
 
     const printFormat = await prisma.printFormat.create({
       data: {

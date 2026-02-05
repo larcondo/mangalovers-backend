@@ -2,7 +2,8 @@ import { prisma } from "@/prisma";
 import { CreateSeriesArgs } from "@types-app/series";
 import { handleMutationError } from "@helpers/mutationErrors";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@helpers/auth";
+import { AuthorizationError } from "@helpers/auth";
+import { AuthService } from "@services/auth";
 import { UserInputError } from "@helpers/clientErrors";
 
 const isInt = (value: string): boolean => {
@@ -16,7 +17,8 @@ const createSeries = async (
 ) => {
   try {
     // Check if the user is allowed to create
-    verifyUserContext(context);
+    if (!AuthService.isUserAuthorized(context))
+      throw new AuthorizationError("Forbidden action");
 
     // Validation
     if (!isInt(args.illustratorId)) {

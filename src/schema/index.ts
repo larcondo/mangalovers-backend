@@ -3,13 +3,6 @@ export const gql = String.raw;
 export const typeDefs = gql`
   scalar Date
 
-  type User {
-    id: ID!
-    username: String!
-    password: String!
-    email: String!
-  }
-
   type UserCreated {
     username: String!
     email: String!
@@ -19,6 +12,7 @@ export const typeDefs = gql`
     username: String!
     email: String!
     accessToken: String!
+    isAdmin: Boolean
   }
 
   type Artist {
@@ -63,7 +57,6 @@ export const typeDefs = gql`
   }
 
   type Query {
-    allUsers: [User]
     allArtists: [Artist]
     artistQty: Int!
     allPrintFormats: [PrintFormat]

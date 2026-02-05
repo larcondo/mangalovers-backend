@@ -1,3 +1,4 @@
+import { Authorization, Roles } from "@types-app/user";
 import bcrypt from "bcrypt";
 
 export class AuthService {
@@ -11,5 +12,9 @@ export class AuthService {
     hash: string,
   ): Promise<boolean> => {
     return bcrypt.compare(password, hash);
+  };
+
+  static isUserAuthorized = (context: Authorization) => {
+    return context.currentUser && context.currentUser.role === Roles.Admin;
   };
 }

@@ -1,9 +1,9 @@
 import { prisma } from "@/prisma";
 import { CreateSeriesArgs } from "@types-app/series";
-import { handleMutationError } from "@/helpers/mutationErrors";
-import { GraphQLError } from "graphql";
+import { handleMutationError } from "@helpers/mutationErrors";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@/helpers/auth";
+import { verifyUserContext } from "@helpers/auth";
+import { UserInputError } from "@helpers/clientErrors";
 
 const isInt = (value: string): boolean => {
   return !isNaN(parseInt(value, 10)) && /^[0-9]+$/.test(value);
@@ -20,16 +20,28 @@ const createSeries = async (
 
     // Validation
     if (!isInt(args.illustratorId)) {
-      throw new GraphQLError("Invalid illustrator format. Must be Integer");
+      throw new UserInputError(
+        "Invalid illustrator format. Must be Integer",
+        "illustratorId",
+      );
     }
     if (!isInt(args.writerId)) {
-      throw new GraphQLError("Invalid writerId format. Must be Integer");
+      throw new UserInputError(
+        "Invalid writerId format. Must be Integer",
+        "writerId",
+      );
     }
     if (!isInt(args.printFormatId)) {
-      throw new GraphQLError("Invalid printFormatId format. Must be Integer");
+      throw new UserInputError(
+        "Invalid printFormatId format. Must be Integer",
+        "printFormatId",
+      );
     }
     if (!isInt(args.publisherId)) {
-      throw new GraphQLError("Invalid publisherId format. Must be Integer");
+      throw new UserInputError(
+        "Invalid publisherId format. Must be Integer",
+        "publisherId",
+      );
     }
 
     const illustratorId = parseInt(args.illustratorId, 10);

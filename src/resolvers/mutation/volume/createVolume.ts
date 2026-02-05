@@ -1,9 +1,9 @@
 import { prisma } from "@/prisma";
 import { CreateVolumeArgs } from "@types-app/volume";
 import { handleMutationError } from "@helpers/mutationErrors";
-import { GraphQLError } from "graphql";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@/helpers/auth";
+import { verifyUserContext } from "@helpers/auth";
+import { UserInputError } from "@helpers/clientErrors";
 
 const createVolume = async (
   _: any,
@@ -21,15 +21,7 @@ const createVolume = async (
     });
 
     if (!series)
-      throw new GraphQLError(`Series id doesn't exists.`, {
-        extensions: {
-          code: "BAD_USER_INPUT",
-          field: "seriesId",
-          http: {
-            status: 400,
-          },
-        },
-      });
+      throw new UserInputError("Series id doesn't exists.", "seriesId");
 
     const volume = await prisma.volume.create({
       data: {

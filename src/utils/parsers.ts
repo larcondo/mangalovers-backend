@@ -29,3 +29,12 @@ export function parseIdsToInt<T extends Record<string, any>, K extends keyof T>(
 
   return parsed as ParsedFields<T, K>;
 }
+
+export function parseSingleIntId(arg: string, field: string): number {
+  if (!isInt(arg)) {
+    throw new UserInputError(
+      `Invalid ${field} format. Must be Integer. Received: ${arg}`,
+    );
+  }
+  return parseInt(arg, 10);
+}

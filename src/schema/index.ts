@@ -56,6 +56,19 @@ export const typeDefs = gql`
     publicationDate: Date
   }
 
+  input UpdateArtistInput {
+    name: String
+  }
+
+  input UpdatePrintFormatInput {
+    name: String
+    description: String
+  }
+
+  input UpdatePublisherInput {
+    name: String
+  }
+
   input UpdateSeriesInput {
     name: String
     publisherId: ID
@@ -64,6 +77,15 @@ export const typeDefs = gql`
     writerId: ID
     urlCover: String
     isSingleVolume: String
+  }
+
+  input UpdateVolumeInput {
+    number: Int
+    title: String
+    urlCover: String
+    synopsis: String
+    publicationDate: Date
+    seriesId: ID
   }
 
   type Query {
@@ -87,8 +109,11 @@ export const typeDefs = gql`
     ): UserCreated
     login(username: String!, password: String!): UserLoggedIn
     createArtist(name: String!): Artist
+    updateArtist(id: ID!, input: UpdateArtistInput): Artist!
     createPublisher(name: String!): Publisher
+    updatePublisher(id: ID!, input: UpdatePublisherInput!): Publisher!
     createPrintFormat(name: String!, description: String): PrintFormat
+    updatePrintFormat(id: ID!, input: UpdatePrintFormatInput!): PrintFormat!
     createSeries(
       name: String!
       illustratorId: ID!
@@ -107,5 +132,6 @@ export const typeDefs = gql`
       synopsis: String
       publicationDate: Date
     ): Volume
+    updateVolume(id: ID!, input: UpdateVolumeInput!): Volume!
   }
 `;

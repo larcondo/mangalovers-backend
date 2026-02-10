@@ -6,3 +6,12 @@ export type Publisher = {
 export interface CreatePublisherArgs {
   name: string;
 }
+
+export interface UpdatePublisherInput {
+  name?: string;
+}
+
+export interface UpdatePublisherArgs {
+  id: string;
+  input: UpdatePublisherInput;
+}

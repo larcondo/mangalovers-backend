@@ -31,3 +31,18 @@ export interface CreateSeriesArgs {
   isSingleVolume?: boolean;
   urlCover?: string;
 }
+
+export interface UpdateSeriesInput {
+  name?: string;
+  printFormatId?: string;
+  publisherId?: string;
+  illustratorId?: string;
+  writerId?: string;
+  isSingleVolume?: boolean;
+  urlCover?: string;
+}
+
+export interface UpdateSeriesArgs {
+  id: string;
+  input: UpdateSeriesInput;
+}

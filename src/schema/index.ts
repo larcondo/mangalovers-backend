@@ -56,6 +56,16 @@ export const typeDefs = gql`
     publicationDate: Date
   }
 
+  input UpdateSeriesInput {
+    name: String
+    publisherId: ID
+    printFormatId: ID
+    illustratorId: ID
+    writerId: ID
+    urlCover: String
+    isSingleVolume: String
+  }
+
   type Query {
     allArtists: [Artist]
     artistQty: Int!
@@ -88,6 +98,7 @@ export const typeDefs = gql`
       urlCover: String
       isSingleVolume: Boolean
     ): Series
+    updateSeries(id: ID!, input: UpdateSeriesInput!): Series!
     createVolume(
       seriesId: ID!
       number: Int!

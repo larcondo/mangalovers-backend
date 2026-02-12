@@ -7,6 +7,7 @@ export enum Roles {
 
 // AccessToken Generation
 export interface UserJWTPayload {
+  id: string;
   username: string;
   email: string;
   role: number;

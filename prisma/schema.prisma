@@ -19,6 +19,8 @@ model User {
   password String
   email String @unique
   role Int @default(0)
+  userSeries UserSeries[] // relation
+  userVolumes UserVolume[] // relation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -63,6 +65,7 @@ model Series {
   writerId Int
   writer Artist @relation("WrittenSeries", fields: [writerId], references: [id])
   volumes Volume[] // relation
+  userSeries UserSeries[] // relation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -76,6 +79,37 @@ model Volume {
   publicationDate DateTime?
   seriesId String
   series Series @relation(fields: [seriesId], references: [id])
+  userVolume UserVolume[] // relation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model UserSeries {
+  id Int @id @default(autoincrement())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  seriesId String
+  series Series @relation(fields: [seriesId], references: [id])
+  active Boolean @default(true)
+  activatedAt DateTime @default(now())
+  deactivatedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, seriesId])
+}
+
+model UserVolume {
+  id Int @id @default(autoincrement())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  volumeId String
+  volume Volume @relation(fields: [volumeId], references: [id])
+  active Boolean @default(true)
+  activatedAt DateTime @default(now())
+  deactivatedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, volumeId])
 }

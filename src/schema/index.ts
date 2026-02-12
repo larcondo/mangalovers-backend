@@ -56,6 +56,18 @@ export const typeDefs = gql`
     publicationDate: Date
   }
 
+  type UserSeries {
+    id: ID
+    series: Series
+  }
+
+  type UserSeriesStatus {
+    id: ID!
+    active: Boolean!
+    activatedAt: Date!
+    deactivatedAt: Date
+  }
+
   input UpdateArtistInput {
     name: String
   }
@@ -99,6 +111,7 @@ export const typeDefs = gql`
     seriesQty: Int!
     allVolumes: [Volume]
     volumeQty: Int!
+    userSeries: [UserSeries]
   }
 
   type Mutation {
@@ -133,5 +146,7 @@ export const typeDefs = gql`
       publicationDate: Date
     ): Volume
     updateVolume(id: ID!, input: UpdateVolumeInput!): Volume!
+    setUserSeries(seriesId: ID!): UserSeriesStatus!
+    unsetUserSeries(seriesId: ID!): UserSeriesStatus!
   }
 `;

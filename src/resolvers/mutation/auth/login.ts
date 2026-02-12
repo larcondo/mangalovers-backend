@@ -31,6 +31,7 @@ const login = async (_: any, { username, password }: LoginArgs) => {
 
     // Creo el accessToken
     const accessToken = JWTService.createAccessToken({
+      id: user.id,
       username: user.username,
       email: user.email,
       role: user.role,

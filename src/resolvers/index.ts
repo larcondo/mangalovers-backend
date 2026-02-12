@@ -20,6 +20,9 @@ import seriesMutation from "./mutation/series";
 import volumeQueries from "./query/volume";
 import volumeMutations from "./mutation/volume";
 
+import userQueries from "./query/user";
+import userMutations from "./mutation/user";
+
 export const resolvers = {
   Query: {
     ...artistQueries,
@@ -27,6 +30,7 @@ export const resolvers = {
     ...printFormatQueries,
     ...seriesQueries,
     ...volumeQueries,
+    ...userQueries,
   },
   Date: dateScalar,
   Series: {
@@ -44,5 +48,6 @@ export const resolvers = {
     ...printFormatMutations,
     ...seriesMutation,
     ...volumeMutations,
+    ...userMutations,
   },
 };

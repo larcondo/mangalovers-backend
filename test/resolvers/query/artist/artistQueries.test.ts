@@ -1,0 +1,50 @@
+import { prismaMock } from "@test/jest.setup";
+import artistQueries from "@/resolvers/query/artist";
+import { Artist } from "generated/prisma/client";
+
+type TArtist = Pick<Artist, "id" | "name">;
+
+describe("artist queries", () => {
+  // Reset prismaMock beforeEach in jest.setup.ts
+
+  it("artist quantity", async () => {
+    const fakeQty = 5;
+
+    prismaMock.artist.count.mockResolvedValue(fakeQty);
+
+    const result = await artistQueries.artistQty();
+
+    expect(result).toBe(fakeQty);
+    expect(prismaMock.artist.count).toHaveBeenCalledTimes(1);
+  });
+
+  it("all artists", async () => {
+    const fakeArtists: TArtist[] = [
+      {
+        id: 1,
+        name: "Hajime Isayama",
+      },
+      {
+        id: 2,
+        name: "Tite Kubo",
+      },
+    ];
+
+    prismaMock.artist.findMany.mockResolvedValue(fakeArtists as any);
+
+    const result = await artistQueries.allArtists();
+
+    expect(result.length).toBe(2);
+    expect(result).toBe(fakeArtists);
+    expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
+    expect(prismaMock.artist.findMany).toHaveBeenCalledWith({
+      orderBy: {
+        createdAt: "desc",
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  });
+});

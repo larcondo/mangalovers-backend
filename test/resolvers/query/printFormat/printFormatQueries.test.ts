@@ -1,9 +1,6 @@
 import { prismaMock } from "@test/jest.setup";
 import printFormatQueries from "@/resolvers/query/printFormat";
-import { PrintFormat } from "generated/prisma/client";
 import { GraphQLError } from "graphql";
-
-type TPrintFormat = Omit<PrintFormat, "createdAt" | "updatedAt">;
 
 describe("printFormat queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -33,7 +30,7 @@ describe("printFormat queries", () => {
   });
 
   it("all printFormats", async () => {
-    const fakePrintFormats: TPrintFormat[] = [
+    const fakePrintFormats: PrintFormatBasic[] = [
       { id: 1, name: "Tankobon", description: "El tamaño más chico." },
       { id: 2, name: "Kanzenban", description: "Edición de lujo." },
       { id: 3, name: "B6", description: null },

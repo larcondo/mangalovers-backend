@@ -11,7 +11,7 @@ type PublisherBasic = {
 type PrintFormatBasic = {
   id: number;
   name: string;
-  description?: string;
+  description: string | null;
 };
 
 // type TSeries = Prisma.SeriesGetPayload<{ ... }>;

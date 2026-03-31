@@ -1,9 +1,6 @@
 import { prismaMock } from "@test/jest.setup";
 import publisherQueries from "@/resolvers/query/publisher";
-import { Publisher } from "generated/prisma/client";
 import { GraphQLError } from "graphql";
-
-type TPublisher = Omit<Publisher, "createdAt" | "updatedAt">;
 
 describe("publisher queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -33,7 +30,7 @@ describe("publisher queries", () => {
   });
 
   it("all publishers", async () => {
-    const fakePublishers: TPublisher[] = [
+    const fakePublishers: PublisherBasic[] = [
       { id: 1, name: "Ivrea" },
       { id: 2, name: "Panini" },
       { id: 3, name: "Ovni Press" },

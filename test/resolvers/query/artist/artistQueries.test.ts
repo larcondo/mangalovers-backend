@@ -1,9 +1,6 @@
 import { prismaMock } from "@test/jest.setup";
 import artistQueries from "@/resolvers/query/artist";
-import { Artist } from "generated/prisma/client";
 import { GraphQLError } from "graphql";
-
-type TArtist = Pick<Artist, "id" | "name">;
 
 describe("artist queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -33,7 +30,7 @@ describe("artist queries", () => {
   });
 
   it("all artists", async () => {
-    const fakeArtists: TArtist[] = [
+    const fakeArtists: ArtistBasic[] = [
       {
         id: 1,
         name: "Hajime Isayama",

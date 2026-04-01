@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma";
 import { AllVolumesArgs } from "@types-app/volume";
 import { GraphQLError } from "graphql";
+import logger from "@services/logger";
 
 const PAGE_LIMIT = 20;
 
@@ -25,7 +26,7 @@ const allVolumes = async (_: any, args: AllVolumesArgs) => {
     });
     return volumes;
   } catch (err) {
-    console.log(err);
+    logger.log(err);
     throw new GraphQLError("Get All Volumes failed");
   }
 };

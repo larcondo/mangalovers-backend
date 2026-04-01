@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { StringValue } from "ms";
 import { EnvironmentVars, Config } from "@types-app/config";
+import logger from "@services/logger";
 
 const DEFAULT_PORT = 4000;
 
@@ -21,7 +22,7 @@ const getConfig = (config: EnvironmentVars): Config => {
       throw new Error(`Env variable ${key} required!`);
     }
   }
-  console.log("[Environment variables] Loaded successfuly!");
+  logger.log("[Environment variables] Loaded successfuly!");
   return config as Config;
 };
 

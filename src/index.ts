@@ -2,6 +2,7 @@ import "dotenv/config";
 import { server } from "./server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { JWTService } from "@services/jwt";
+import logger from "@services/logger";
 import config from "@config/config";
 
 const PORT = config.PORT;
@@ -19,5 +20,5 @@ startStandaloneServer(server, {
     port: PORT,
   },
 }).then(({ url }) => {
-  console.log(`Mangalovers Server ready at ${url}`);
+  logger.log(`Mangalovers Server ready at ${url}`);
 });

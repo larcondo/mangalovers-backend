@@ -1,3 +1,22 @@
+# Mangalovers - Backend
+
+To run app in development mode:
+
+```
+pnpm run dev
+```
+
+## Required Environment Variables
+
+Create a `.env` file with the following environment variables:
+
+| **Name**                | **Description**              |
+| ----------------------- | ---------------------------- |
+| PORT                    | Apollo server listening port |
+| DATABASE_URL            | PostgreSQL database URL      |
+| JWT_ACCESS_TOKEN_SECRET | Secret for JWT access token  |
+| JWT_EXPIRES_IN          | JWT access token expiration  |
+
 # Prisma ORM and PostgreSQL
 
 ## Install Dependencies

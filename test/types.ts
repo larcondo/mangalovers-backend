@@ -35,3 +35,15 @@ type TestVolume = {
   publicationDate?: string;
   series: TestSeries;
 };
+
+type TestUserSeries = {
+  id: number;
+  series: TestSeries;
+};
+
+type TestUserSeriesBasic = {
+  id: number;
+  active: boolean;
+  activatedAt: Date;
+  deactivatedAt: Date | null;
+};

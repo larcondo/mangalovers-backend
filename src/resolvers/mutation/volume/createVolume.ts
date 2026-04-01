@@ -23,7 +23,7 @@ const createVolume = async (
     });
 
     if (!series)
-      throw new UserInputError("Series id doesn't exists.", "seriesId");
+      throw new UserInputError("Series id doesn't exist.", "seriesId");
 
     const volume = await prisma.volume.create({
       data: {

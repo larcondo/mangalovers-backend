@@ -15,8 +15,8 @@ const login = async (_: any, { username, password }: LoginArgs) => {
 
     if (!user)
       throw new AuthenticationError(
-        `User ${username} does't exists.`,
-        "usernanme",
+        `User ${username} doesn't exists.`,
+        "username",
       );
 
     // Verifico si el password es válido

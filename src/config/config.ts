@@ -11,6 +11,7 @@ const readEnv = (): EnvironmentVars => {
   return {
     PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : DEFAULT_PORT,
     DATABASE_URL: process.env.DATABASE_URL,
+    TEST_DATABASE_URL: process.env.TEST_DATABASE_URL,
     JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN as ExpiresInOpt,
     JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET,
   };

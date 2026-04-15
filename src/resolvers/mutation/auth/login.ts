@@ -1,9 +1,9 @@
-import { prisma } from "src/prisma";
-import { JWTService } from "src/services/jwt";
-import { LoginArgs } from "src/types/user";
-import { AuthService } from "src/services/auth";
-import { handleMutationError } from "src/helpers/mutationErrors";
-import { AuthenticationError } from "src/helpers/auth";
+import { prisma } from "@/prisma";
+import { JWTService } from "@services/jwt";
+import { LoginArgs } from "@types-app/user";
+import { AuthService } from "@services/auth";
+import { handleMutationError } from "@helpers/mutationErrors";
+import { AuthenticationError } from "@helpers/auth";
 
 const login = async (_: any, { username, password }: LoginArgs) => {
   try {

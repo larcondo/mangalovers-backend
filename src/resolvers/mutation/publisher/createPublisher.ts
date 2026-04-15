@@ -1,8 +1,8 @@
-import { prisma } from "src/prisma";
-import { CreatePublisherArgs } from "src/types/publisher";
-import { Authorization } from "src/types/user";
-import { verifyUserContext } from "src/helpers/auth";
-import { handleMutationError } from "src/helpers/mutationErrors";
+import { prisma } from "@/prisma";
+import { CreatePublisherArgs } from "@types-app/publisher";
+import { Authorization } from "@types-app/user";
+import { verifyUserContext } from "@helpers/auth";
+import { handleMutationError } from "@helpers/mutationErrors";
 
 const createPublisher = async (
   _: any,

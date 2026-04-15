@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { StringValue } from "ms";
-import { EnvironmentVars, Config } from "src/types/config";
+import { EnvironmentVars, Config } from "@types-app/config";
 
 const DEFAULT_PORT = 4000;
 

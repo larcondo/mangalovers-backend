@@ -43,7 +43,15 @@
     "skipLibCheck": true,
 
     "baseUrl": ".",
-    "paths": {},
+    "paths": {
+      "@/*": ["src/*"],
+      "@config/*": ["src/config/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@resolvers/*": ["src/resolvers/*"],
+      "@schema/*": ["src/schema/*"],
+      "@services/*": ["src/services/*"],
+      "@types-app/*": ["src/types/*"]
+    },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   }

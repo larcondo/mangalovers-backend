@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import { UserJWTPayload } from "src/types/user";
-import config from "src/config/config";
+import { UserJWTPayload } from "@types-app/user";
+import config from "@config/config";
 
 export class JWTService {
   private static secret = config.JWT_ACCESS_TOKEN_SECRET;

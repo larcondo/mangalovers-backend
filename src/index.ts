@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { server } from "./server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { JWTService } from "./services/jwt";
-import config from "./config/config";
+import { JWTService } from "@services/jwt";
+import config from "@config/config";
 
 const PORT = config.PORT;
 

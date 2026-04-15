@@ -1,8 +1,8 @@
-import { prisma } from "src/prisma";
-import { CreateArtistArgs } from "src/types/artist";
-import { Authorization } from "src/types/user";
-import { verifyUserContext } from "src/helpers/auth";
-import { handleMutationError } from "src/helpers/mutationErrors";
+import { prisma } from "@/prisma";
+import { CreateArtistArgs } from "@types-app/artist";
+import { Authorization } from "@types-app/user";
+import { verifyUserContext } from "@helpers/auth";
+import { handleMutationError } from "@helpers/mutationErrors";
 
 const createArtist = async (
   _: any,

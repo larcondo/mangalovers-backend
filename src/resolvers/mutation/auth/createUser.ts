@@ -1,7 +1,7 @@
-import { prisma } from "src/prisma";
-import { CreateUserArgs } from "src/types/user";
-import { AuthService } from "src/services/auth";
-import { handleMutationError } from "src/helpers/mutationErrors";
+import { prisma } from "@/prisma";
+import { CreateUserArgs } from "@types-app/user";
+import { AuthService } from "@services/auth";
+import { handleMutationError } from "@helpers/mutationErrors";
 
 const createUser = async (
   _: any,

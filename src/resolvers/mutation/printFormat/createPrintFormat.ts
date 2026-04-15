@@ -1,13 +1,13 @@
 import { prisma } from "@/prisma";
-import { CreateArtistArgs } from "@types-app/artist";
-import { Authorization } from "@types-app/user";
-import { AuthService } from "@services/auth";
+import { CreatePrintFormat } from "@types-app/printFormat";
 import { handleMutationError } from "@helpers/mutationErrors";
-import { AuthorizationError } from "@/helpers/auth";
+import { Authorization } from "@types-app/user";
+import { AuthorizationError } from "@helpers/auth";
+import { AuthService } from "@services/auth";
 
-const createArtist = async (
+const createPrintFormat = async (
   _: any,
-  { name }: CreateArtistArgs,
+  { name, description }: CreatePrintFormat,
   context: Authorization,
 ) => {
   try {
@@ -15,19 +15,20 @@ const createArtist = async (
     if (!AuthService.isUserAuthorized(context))
       throw new AuthorizationError("Forbidden action");
 
-    const artist = await prisma.artist.create({
+    const printFormat = await prisma.printFormat.create({
       data: {
         name,
+        description,
       },
       omit: {
         createdAt: true,
         updatedAt: true,
       },
     });
-    return artist;
+    return printFormat;
   } catch (err) {
-    handleMutationError(err, true, "Create Artist Mutation failed");
+    handleMutationError(err, true, "Create PrintFormat Mutation failed");
   }
 };
 
-export default createArtist;
+export default createPrintFormat;

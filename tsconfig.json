@@ -50,7 +50,8 @@
       "@resolvers/*": ["src/resolvers/*"],
       "@schema/*": ["src/schema/*"],
       "@services/*": ["src/services/*"],
-      "@types-app/*": ["src/types/*"]
+      "@types-app/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true

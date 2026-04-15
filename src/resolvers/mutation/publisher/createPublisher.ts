@@ -1,8 +1,9 @@
 import { prisma } from "@/prisma";
 import { CreatePublisherArgs } from "@types-app/publisher";
 import { Authorization } from "@types-app/user";
-import { verifyUserContext } from "@helpers/auth";
+import { AuthorizationError } from "@helpers/auth";
 import { handleMutationError } from "@helpers/mutationErrors";
+import { AuthService } from "@services/auth";
 
 const createPublisher = async (
   _: any,
@@ -11,7 +12,8 @@ const createPublisher = async (
 ) => {
   try {
     // Check if the user is allowed to create
-    verifyUserContext(context);
+    if (!AuthService.isUserAuthorized(context))
+      throw new AuthorizationError("Forbidden action");
 
     const publisher = await prisma.publisher.create({
       data: {

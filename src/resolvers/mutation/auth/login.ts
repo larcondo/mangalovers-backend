@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { JWTService } from "@services/jwt";
-import { LoginArgs } from "@types-app/user";
+import { LoginArgs, Roles } from "@types-app/user";
 import { AuthService } from "@services/auth";
 import { handleMutationError } from "@helpers/mutationErrors";
 import { AuthenticationError } from "@helpers/auth";
@@ -31,11 +31,18 @@ const login = async (_: any, { username, password }: LoginArgs) => {
 
     // Creo el accessToken
     const accessToken = JWTService.createAccessToken({
+      id: user.id,
       username: user.username,
       email: user.email,
+      role: user.role,
     });
 
-    return { username: user.username, email: user.email, accessToken };
+    return {
+      username: user.username,
+      email: user.email,
+      accessToken,
+      isAdmin: user.role === Roles.Admin,
+    };
   } catch (err) {
     handleMutationError(err, true, "Login failed");
   }

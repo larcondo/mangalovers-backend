@@ -2,13 +2,9 @@ import "dotenv/config";
 import { server } from "./server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { JWTService } from "./services/jwt";
+import config from "./config/config";
 
-if (!process.env.PORT) {
-  console.error("Error: Environment Variable PORT is not defined!");
-  process.exit(1);
-}
-
-const PORT = Number(process.env.PORT);
+const PORT = config.PORT;
 
 startStandaloneServer(server, {
   context: async ({ req }) => {

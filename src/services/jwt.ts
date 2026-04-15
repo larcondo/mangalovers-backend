@@ -1,12 +1,11 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import type { StringValue } from "ms";
 import { UserJWTPayload } from "src/types/user";
+import config from "src/config/config";
 
 export class JWTService {
-  private static secret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
-  private static expiresIn =
-    (process.env.JWT_EXPIRES_IN as number | StringValue) ?? "15m";
+  private static secret = config.JWT_ACCESS_TOKEN_SECRET;
+  private static expiresIn = config.JWT_EXPIRES_IN ?? "15m";
 
   // Genera un nuevo accessToken
   static createAccessToken = (payload: UserJWTPayload): string => {

@@ -71,4 +71,48 @@ describe("artist queries", () => {
     }
     expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
   });
+
+  it("search artists", async () => {
+    const fakeArtists: ArtistBasic[] = [
+      {
+        id: 1,
+        name: "Hajime Isayama",
+      },
+    ];
+
+    prismaMock.artist.findMany.mockResolvedValue(fakeArtists as any);
+
+    const result = await artistQueries.searchArtists(null, {
+      query: "ISAyama",
+    });
+
+    expect(result.length).toBe(1);
+    expect(result).toBe(fakeArtists);
+    expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
+    expect(prismaMock.artist.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: "isayama",
+          mode: "insensitive",
+        },
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  });
+
+  it("search artists fail if prisma fails", async () => {
+    prismaMock.artist.findMany.mockRejectedValue(null);
+
+    try {
+      await artistQueries.searchArtists(null, { query: "ISAyama" });
+    } catch (error) {
+      expect(error).toBeInstanceOf(GraphQLError);
+      const { message } = error as GraphQLError;
+      expect(message).toBe("Search Artists failed");
+    }
+    expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
+  });
 });

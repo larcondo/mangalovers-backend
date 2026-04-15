@@ -17,7 +17,7 @@
     // and npm install -D @types/node
 
     // Other Outputs
-    // "sourceMap": true,
+    "sourceMap": true,
     // "declaration": true,
     // "declarationMap": true,
 
@@ -51,7 +51,8 @@
       "@schema/*": ["src/schema/*"],
       "@services/*": ["src/services/*"],
       "@types-app/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@test/*": ["test/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true

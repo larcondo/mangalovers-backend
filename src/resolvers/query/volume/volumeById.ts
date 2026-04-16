@@ -1,9 +1,8 @@
 import { UserInputError } from "@/helpers/clientErrors";
 import { prisma } from "@/prisma";
-import logger from "@services/logger";
 import { VolumeByIdArgs } from "@types-app/volume";
-import { GraphQLError } from "graphql";
 import { volumeSelect } from "@constants/index";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const volumeById = async (_: any, args: VolumeByIdArgs) => {
   const { id } = args;
@@ -22,12 +21,7 @@ const volumeById = async (_: any, args: VolumeByIdArgs) => {
 
     return volume;
   } catch (err) {
-    logger.log(err);
-    if (err instanceof GraphQLError) {
-      throw err;
-    } else {
-      throw new GraphQLError("Get Volume by Id failed");
-    }
+    handleUnknownError(err, "Get Volume by Id failed");
   }
 };
 

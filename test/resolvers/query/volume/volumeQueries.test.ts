@@ -97,8 +97,11 @@ describe("volume queries", () => {
 
     const result = await volumeQueries.allVolumes(null, { page: 1 });
 
-    expect(result.length).toBe(fakeVolumes.length);
-    expect(result).toBe(fakeVolumes);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(fakeVolumes.length);
+      expect(result).toBe(fakeVolumes);
+    }
     expect(prismaMock.volume.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.volume.findMany).toHaveBeenCalledWith({
       include: {

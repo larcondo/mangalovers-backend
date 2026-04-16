@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { UpdateArtistArgs } from "@types-app/artist";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
 import { AuthorizationError } from "@helpers/auth";
@@ -29,7 +29,7 @@ const updateArtist = async (
 
     return artist;
   } catch (err) {
-    handleMutationError(err, true, "Update Artist Mutation failed");
+    handleUnknownError(err, "Update Artist Mutation failed");
   }
 };
 

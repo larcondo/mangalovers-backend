@@ -1,7 +1,6 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
 import { AllSeriesArgs } from "@types-app/series";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const PAGE_LIMIT = 20;
 
@@ -30,8 +29,7 @@ const allSeries = async (_: any, args: AllSeriesArgs) => {
     });
     return series;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get All Series failed");
+    handleUnknownError(err, "Get All Series failed");
   }
 };
 

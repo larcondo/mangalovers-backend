@@ -2,7 +2,7 @@ import { prisma } from "@/prisma";
 import { CreateArtistArgs } from "@types-app/artist";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { AuthorizationError } from "@/helpers/auth";
 
 const createArtist = async (
@@ -26,7 +26,7 @@ const createArtist = async (
     });
     return artist;
   } catch (err) {
-    handleMutationError(err, true, "Create Artist Mutation failed");
+    handleUnknownError(err, "Create Artist Mutation failed");
   }
 };
 

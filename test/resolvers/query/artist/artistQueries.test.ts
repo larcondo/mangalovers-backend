@@ -45,8 +45,11 @@ describe("artist queries", () => {
 
     const result = await artistQueries.allArtists();
 
-    expect(result.length).toBe(2);
-    expect(result).toBe(fakeArtists);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(2);
+      expect(result).toBe(fakeArtists);
+    }
     expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.artist.findMany).toHaveBeenCalledWith({
       orderBy: {
@@ -86,8 +89,11 @@ describe("artist queries", () => {
       query: "ISAyama",
     });
 
-    expect(result.length).toBe(1);
-    expect(result).toBe(fakeArtists);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(1);
+      expect(result).toBe(fakeArtists);
+    }
     expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.artist.findMany).toHaveBeenCalledWith({
       where: {

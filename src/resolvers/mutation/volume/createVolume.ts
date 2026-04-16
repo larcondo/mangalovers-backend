@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { CreateVolumeArgs } from "@types-app/volume";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
@@ -40,7 +40,7 @@ const createVolume = async (
     });
     return volume;
   } catch (err) {
-    handleMutationError(err, true, "Create Volume Mutation failed");
+    handleUnknownError(err, "Create Volume Mutation failed");
   }
 };
 

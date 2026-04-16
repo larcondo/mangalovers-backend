@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma";
-import { handleMutationError } from "@/helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@/types/user";
 import { AuthorizationError } from "@/helpers/auth";
 
@@ -39,7 +39,7 @@ const setUserSeries = async (
     });
     return record;
   } catch (err) {
-    handleMutationError(err, true, "Set UserSeries Mutation failed");
+    handleUnknownError(err, "Set UserSeries Mutation failed");
   }
 };
 

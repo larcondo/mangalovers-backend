@@ -84,8 +84,11 @@ describe("series queries", () => {
 
     const result = await seriesQueries.allSeries(null, { page: 1 });
 
-    expect(result.length).toBe(2);
-    expect(result).toBe(fakeSeries);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(2);
+      expect(result).toBe(fakeSeries);
+    }
     expect(prismaMock.series.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.series.findMany).toHaveBeenCalledWith({
       include: {

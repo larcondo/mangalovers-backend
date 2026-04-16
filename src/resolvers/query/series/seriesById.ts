@@ -2,8 +2,7 @@ import { prisma } from "@/prisma";
 import { SeriesByIdArgs } from "@types-app/series";
 import { UserInputError } from "@helpers/clientErrors";
 import { seriesSelect } from "@constants/index";
-import logger from "@services/logger";
-import { GraphQLError } from "graphql";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const seriesById = async (_: any, args: SeriesByIdArgs) => {
   const { id } = args;
@@ -19,12 +18,7 @@ const seriesById = async (_: any, args: SeriesByIdArgs) => {
 
     return series;
   } catch (err) {
-    logger.log(err);
-    if (err instanceof GraphQLError) {
-      throw err;
-    } else {
-      throw new GraphQLError("Get Series by Id failed");
-    }
+    handleUnknownError(err, "Get Series by Id failed");
   }
 };
 

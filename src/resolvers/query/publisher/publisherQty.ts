@@ -1,14 +1,12 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const publisherQty = async () => {
   try {
     const qty = await prisma.publisher.count();
     return qty;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get Publisher Quantity failed");
+    handleUnknownError(err, "Get Publisher Quantity failed");
   }
 };
 

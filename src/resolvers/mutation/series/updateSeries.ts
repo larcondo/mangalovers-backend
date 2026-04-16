@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { UpdateSeriesArgs } from "@types-app/series";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { parseIdsToInt } from "@utils/parsers";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
@@ -42,7 +42,7 @@ const updateSeries = async (
     });
     return series;
   } catch (err) {
-    handleMutationError(err, true, "Update Series Mutation failed");
+    handleUnknownError(err, "Update Series Mutation failed");
   }
 };
 

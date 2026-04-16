@@ -1,5 +1,5 @@
 import { AuthorizationError } from "@/helpers/auth";
-import { handleMutationError } from "@/helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { prisma } from "@/prisma";
 import { Authorization } from "@/types/user";
 
@@ -36,7 +36,7 @@ const unsetUserSeries = async (
 
     return record;
   } catch (error) {
-    handleMutationError(error, true, "Unset UserSeries Mutation failed");
+    handleUnknownError(error, "Unset UserSeries Mutation failed");
   }
 };
 

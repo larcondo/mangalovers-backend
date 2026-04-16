@@ -1,14 +1,12 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const printFormatQty = async () => {
   try {
     const qty = await prisma.printFormat.count();
     return qty;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get PrintFormat Quantity failed");
+    handleUnknownError(err, "Get PrintFormat Quantity failed");
   }
 };
 

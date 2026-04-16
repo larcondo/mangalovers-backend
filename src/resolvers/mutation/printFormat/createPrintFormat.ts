@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { CreatePrintFormat } from "@types-app/printFormat";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
@@ -27,7 +27,7 @@ const createPrintFormat = async (
     });
     return printFormat;
   } catch (err) {
-    handleMutationError(err, true, "Create PrintFormat Mutation failed");
+    handleUnknownError(err, "Create PrintFormat Mutation failed");
   }
 };
 

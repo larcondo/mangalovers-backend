@@ -40,8 +40,11 @@ describe("printFormat queries", () => {
 
     const result = await printFormatQueries.allPrintFormats();
 
-    expect(result.length).toBe(fakePrintFormats.length);
-    expect(result).toBe(fakePrintFormats);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(fakePrintFormats.length);
+      expect(result).toBe(fakePrintFormats);
+    }
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledWith({
       orderBy: {
@@ -78,8 +81,11 @@ describe("printFormat queries", () => {
       query: "TANKO",
     });
 
-    expect(result.length).toBe(1);
-    expect(result).toBe(fakePrintFormats);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(1);
+      expect(result).toBe(fakePrintFormats);
+    }
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledWith({
       where: {

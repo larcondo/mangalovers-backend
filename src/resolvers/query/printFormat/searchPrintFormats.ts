@@ -1,7 +1,6 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
 import { SearchArgs } from "@types-app/general";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const searchPrintFormats = async (_: any, args: SearchArgs) => {
   const { query } = args;
@@ -23,8 +22,7 @@ const searchPrintFormats = async (_: any, args: SearchArgs) => {
 
     return printFormats;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Search PrintFormats failed");
+    handleUnknownError(err, "Search PrintFormats failed");
   }
 };
 

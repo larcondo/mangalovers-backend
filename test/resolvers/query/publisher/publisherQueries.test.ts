@@ -40,8 +40,11 @@ describe("publisher queries", () => {
 
     const result = await publisherQueries.allPublishers();
 
-    expect(result.length).toBe(fakePublishers.length);
-    expect(result).toBe(fakePublishers);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(fakePublishers.length);
+      expect(result).toBe(fakePublishers);
+    }
     expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.publisher.findMany).toHaveBeenCalledWith({
       orderBy: {
@@ -76,8 +79,11 @@ describe("publisher queries", () => {
       query: "Pani",
     });
 
-    expect(result.length).toBe(1);
-    expect(result).toBe(fakePublishers);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(1);
+      expect(result).toBe(fakePublishers);
+    }
     expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.publisher.findMany).toHaveBeenCalledWith({
       where: {

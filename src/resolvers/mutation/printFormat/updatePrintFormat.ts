@@ -1,5 +1,5 @@
 import { AuthorizationError } from "@/helpers/auth";
-import { handleMutationError } from "@/helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { prisma } from "@/prisma";
 import { AuthService } from "@/services/auth";
 import { UpdatePrintFormatArgs } from "@/types/printFormat";
@@ -29,7 +29,7 @@ const updatePrintFormat = async (
 
     return printFormat;
   } catch (err) {
-    handleMutationError(err, true, "Update PrintFormat Mutation failed");
+    handleUnknownError(err, "Update PrintFormat Mutation failed");
   }
 };
 

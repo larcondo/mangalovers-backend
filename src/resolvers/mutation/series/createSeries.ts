@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { CreateSeriesArgs } from "@types-app/series";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
@@ -76,7 +76,7 @@ const createSeries = async (
     logger.log(series);
     return series;
   } catch (err) {
-    handleMutationError(err, true, "Create Series Mutation failed");
+    handleUnknownError(err, "Create Series Mutation failed");
   }
 };
 

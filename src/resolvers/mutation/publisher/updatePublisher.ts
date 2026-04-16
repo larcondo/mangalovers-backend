@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
 import { UpdatePublisherArgs } from "@types-app/publisher";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@/services/auth";
 import { AuthorizationError } from "@helpers/auth";
@@ -29,7 +29,7 @@ const updatePublisher = async (
 
     return publisher;
   } catch (err) {
-    handleMutationError(err, true, "Update Publisher Mutation failed");
+    handleUnknownError(err, "Update Publisher Mutation failed");
   }
 };
 

@@ -1,6 +1,8 @@
 import { prismaMock } from "@test/jest.setup";
 import seriesQueries from "@/resolvers/query/series";
 import { GraphQLError } from "graphql";
+import { seriesSelect } from "@constants/index";
+import { UserInputError } from "@/helpers/clientErrors";
 
 describe("series queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -115,5 +117,80 @@ describe("series queries", () => {
       expect(message).toBe("Get All Series failed");
     }
     expect(prismaMock.series.findMany).toHaveBeenCalledTimes(1);
+  });
+
+  it("series by id", async () => {
+    const fakeSeries: TestSeries = {
+      id: "69516360-b28c-408a-887c-b370d968a0ef",
+      name: "Slam Dunk",
+      isSingleVolume: false,
+      urlCover: "/series/slam-dunk.jpg",
+      writer: {
+        id: 1,
+        name: "Takehiko Inoue",
+      },
+      illustrator: {
+        id: 1,
+        name: "Takehiko Inoue",
+      },
+      publisher: {
+        id: 1,
+        name: "Ivrea",
+      },
+      printFormat: {
+        id: 1,
+        name: "B6 doble",
+        description: "B6 con doble cantidad de páginas",
+      },
+    };
+
+    prismaMock.series.findUnique.mockResolvedValue(fakeSeries as any);
+
+    const result = await seriesQueries.seriesById(null, {
+      id: "69516360-b28c-408a-887c-b370d968a0ef",
+    });
+
+    expect(result).toBeDefined();
+    expect(result).toBe(fakeSeries);
+    expect(prismaMock.series.findUnique).toHaveBeenCalledTimes(1);
+    expect(prismaMock.series.findUnique).toHaveBeenCalledWith({
+      where: { id: fakeSeries.id },
+      select: seriesSelect,
+    });
+  });
+
+  it("series by id fail if id does not exist", async () => {
+    const nonExistingId = "69516360-b28c-408a-887c-000000000000";
+
+    prismaMock.series.findUnique.mockResolvedValue(null);
+
+    try {
+      await seriesQueries.seriesById(null, {
+        id: nonExistingId,
+      });
+    } catch (error) {
+      expect(error).toBeInstanceOf(UserInputError);
+      const { message, extensions } = error as UserInputError;
+      expect(message).toBe(
+        `The series with id ${nonExistingId} does not exist`,
+      );
+      expect(extensions.field).toBe("id");
+    }
+    expect(prismaMock.series.findUnique).toHaveBeenCalledTimes(1);
+  });
+
+  it("series by id fail if prisma fails", async () => {
+    prismaMock.series.findUnique.mockRejectedValue(null);
+
+    try {
+      await seriesQueries.seriesById(null, {
+        id: "69516360-b28c-408a-887c-b370d968a0ef",
+      });
+    } catch (error) {
+      expect(error).toBeInstanceOf(GraphQLError);
+      const { message } = error as GraphQLError;
+      expect(message).toBe("Get Series by Id failed");
+    }
+    expect(prismaMock.series.findUnique).toHaveBeenCalledTimes(1);
   });
 });

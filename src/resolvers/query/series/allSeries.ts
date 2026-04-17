@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma";
 import { AllSeriesArgs } from "@types-app/series";
 import { handleUnknownError } from "@helpers/unknownErrors";
+import { seriesSelect } from "@constants/index";
 
 const PAGE_LIMIT = 20;
 
@@ -11,20 +12,11 @@ const allSeries = async (_: any, args: AllSeriesArgs) => {
 
   try {
     const series = await prisma.series.findMany({
-      include: {
-        illustrator: true,
-        writer: true,
-        printFormat: true,
-        publisher: true,
-      },
+      select: seriesSelect,
       take: PAGE_LIMIT,
       skip: offset,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
     return series;

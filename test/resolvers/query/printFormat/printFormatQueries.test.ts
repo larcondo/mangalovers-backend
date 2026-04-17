@@ -1,6 +1,7 @@
 import { prismaMock } from "@test/jest.setup";
 import printFormatQueries from "@/resolvers/query/printFormat";
 import { GraphQLError } from "graphql";
+import { printFormatSelect } from "@constants/index";
 
 describe("printFormat queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -47,12 +48,9 @@ describe("printFormat queries", () => {
     }
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledWith({
+      select: printFormatSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
   });
@@ -94,10 +92,7 @@ describe("printFormat queries", () => {
           mode: "insensitive",
         },
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: printFormatSelect,
     });
   });
 

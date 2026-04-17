@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma";
 import { AllVolumesArgs } from "@types-app/volume";
 import { handleUnknownError } from "@helpers/unknownErrors";
+import { volumeSelect } from "@constants/index";
 
 const PAGE_LIMIT = 20;
 
@@ -10,17 +11,11 @@ const allVolumes = async (_: any, args: AllVolumesArgs) => {
 
   try {
     const volumes = await prisma.volume.findMany({
-      include: {
-        series: true,
-      },
+      select: volumeSelect,
       take: PAGE_LIMIT,
       skip: offset,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
     return volumes;

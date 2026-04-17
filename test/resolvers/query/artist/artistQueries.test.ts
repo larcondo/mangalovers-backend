@@ -1,6 +1,7 @@
 import { prismaMock } from "@test/jest.setup";
 import artistQueries from "@/resolvers/query/artist";
 import { GraphQLError } from "graphql";
+import { artistSelect } from "@constants/index";
 
 describe("artist queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -52,12 +53,9 @@ describe("artist queries", () => {
     }
     expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.artist.findMany).toHaveBeenCalledWith({
+      select: artistSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
   });
@@ -102,10 +100,7 @@ describe("artist queries", () => {
           mode: "insensitive",
         },
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: artistSelect,
     });
   });
 

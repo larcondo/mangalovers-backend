@@ -104,17 +104,11 @@ describe("volume queries", () => {
     }
     expect(prismaMock.volume.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.volume.findMany).toHaveBeenCalledWith({
-      include: {
-        series: true,
-      },
+      select: volumeSelect,
       take: 20,
       skip: 0,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
   });

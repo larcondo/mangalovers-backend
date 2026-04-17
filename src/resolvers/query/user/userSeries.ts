@@ -2,6 +2,7 @@ import { prisma } from "@/prisma";
 import { AuthorizationError } from "@helpers/auth";
 import { Authorization } from "@types-app/user";
 import { handleUnknownError } from "@helpers/unknownErrors";
+import { seriesSelect } from "@constants/index";
 
 const userSeries = async (_: any, args: any, context: Authorization) => {
   try {
@@ -14,17 +15,11 @@ const userSeries = async (_: any, args: any, context: Authorization) => {
       },
       select: {
         id: true,
+        active: true,
+        activatedAt: true,
+        deactivatedAt: true,
         series: {
-          include: {
-            writer: true,
-            illustrator: true,
-            publisher: true,
-            printFormat: true,
-          },
-          omit: {
-            createdAt: true,
-            updatedAt: true,
-          },
+          select: seriesSelect,
         },
       },
     });

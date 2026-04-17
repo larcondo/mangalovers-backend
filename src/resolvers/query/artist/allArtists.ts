@@ -1,15 +1,13 @@
 import { prisma } from "@/prisma";
 import { handleUnknownError } from "@helpers/unknownErrors";
+import { artistSelect } from "@constants/index";
 
 const allArtists = async () => {
   try {
     const artists = await prisma.artist.findMany({
+      select: artistSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
 

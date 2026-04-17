@@ -91,20 +91,11 @@ describe("series queries", () => {
     }
     expect(prismaMock.series.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.series.findMany).toHaveBeenCalledWith({
-      include: {
-        illustrator: true,
-        writer: true,
-        printFormat: true,
-        publisher: true,
-      },
+      select: seriesSelect,
       take: 20,
       skip: 0,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
   });

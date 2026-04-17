@@ -1,6 +1,7 @@
 import { prismaMock } from "@test/jest.setup";
 import publisherQueries from "@/resolvers/query/publisher";
 import { GraphQLError } from "graphql";
+import { publisherSelect } from "@constants/index";
 
 describe("publisher queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -47,12 +48,9 @@ describe("publisher queries", () => {
     }
     expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.publisher.findMany).toHaveBeenCalledWith({
+      select: publisherSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
   });
@@ -92,10 +90,7 @@ describe("publisher queries", () => {
           mode: "insensitive",
         },
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: publisherSelect,
     });
   });
 

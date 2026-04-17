@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma";
 import { SearchArgs } from "@types-app/general";
 import { handleUnknownError } from "@helpers/unknownErrors";
+import { printFormatSelect } from "@constants/index";
 
 const searchPrintFormats = async (_: any, args: SearchArgs) => {
   const { query } = args;
@@ -14,10 +15,7 @@ const searchPrintFormats = async (_: any, args: SearchArgs) => {
           mode: "insensitive",
         },
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: printFormatSelect,
     });
 
     return printFormats;

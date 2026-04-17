@@ -6,6 +6,7 @@ import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
 import { UserInputError } from "@helpers/clientErrors";
 import logger from "@services/logger";
+import { seriesSelect } from "@constants/index";
 
 const isInt = (value: string): boolean => {
   return !isNaN(parseInt(value, 10)) && /^[0-9]+$/.test(value);
@@ -62,18 +63,9 @@ const createSeries = async (
         isSingleVolume: args.isSingleVolume,
         urlCover: args.urlCover,
       },
-      include: {
-        illustrator: true,
-        writer: true,
-        printFormat: true,
-        publisher: true,
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: seriesSelect,
     });
-    logger.log(series);
+
     return series;
   } catch (err) {
     handleUnknownError(err, "Create Series Mutation failed");

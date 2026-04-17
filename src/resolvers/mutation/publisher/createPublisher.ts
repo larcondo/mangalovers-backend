@@ -4,6 +4,7 @@ import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { handleUnknownError } from "@helpers/unknownErrors";
 import { AuthService } from "@services/auth";
+import { publisherSelect } from "@constants/index";
 
 const createPublisher = async (
   _: any,
@@ -19,10 +20,7 @@ const createPublisher = async (
       data: {
         name,
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: publisherSelect,
     });
     return publisher;
   } catch (err) {

@@ -4,6 +4,7 @@ import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
 import { AuthorizationError } from "@helpers/auth";
+import { volumeSelect } from "@constants/index";
 
 const updateVolume = async (
   _: any,
@@ -20,14 +21,9 @@ const updateVolume = async (
         id: args.id,
       },
       data: args.input,
-      include: {
-        series: true,
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: volumeSelect,
     });
+
     return volume;
   } catch (err) {
     handleUnknownError(err, "Update Volume Mutation failed");

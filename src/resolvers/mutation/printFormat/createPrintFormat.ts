@@ -4,6 +4,7 @@ import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
+import { printFormatSelect } from "@constants/index";
 
 const createPrintFormat = async (
   _: any,
@@ -20,10 +21,7 @@ const createPrintFormat = async (
         name,
         description,
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: printFormatSelect,
     });
     return printFormat;
   } catch (err) {

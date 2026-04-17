@@ -5,6 +5,7 @@ import { parseIdsToInt } from "@utils/parsers";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
 import { AuthorizationError } from "@helpers/auth";
+import { seriesSelect } from "@constants/index";
 
 const updateSeries = async (
   _: any,
@@ -29,16 +30,7 @@ const updateSeries = async (
         id: args.id,
       },
       data: parsedArgs,
-      include: {
-        writer: true,
-        illustrator: true,
-        printFormat: true,
-        publisher: true,
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: seriesSelect,
     });
     return series;
   } catch (err) {

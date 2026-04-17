@@ -5,6 +5,7 @@ import { Authorization } from "@types-app/user";
 import { AuthService } from "@/services/auth";
 import { AuthorizationError } from "@helpers/auth";
 import { parseSingleIntId } from "@utils/parsers";
+import { publisherSelect } from "@constants/index";
 
 const updatePublisher = async (
   _: any,
@@ -21,10 +22,7 @@ const updatePublisher = async (
         id: parseSingleIntId(args.id, "publisherId"),
       },
       data: args.input,
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: publisherSelect,
     });
 
     return publisher;

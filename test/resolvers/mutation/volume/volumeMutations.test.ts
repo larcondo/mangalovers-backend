@@ -3,6 +3,7 @@ import volumeMutations from "@/resolvers/mutation/volume";
 import { UserInputError } from "@/helpers/clientErrors";
 import { AuthorizationError } from "@/helpers/auth";
 import { GraphQLError } from "graphql";
+import { volumeSelect } from "@constants/index";
 
 describe("volume mutations - create", () => {
   it("create volume successfully", async () => {
@@ -66,9 +67,7 @@ describe("volume mutations - create", () => {
         urlCover: fakeVolume.urlCover,
         publicationDate: new Date("2021-08-03"),
       },
-      include: {
-        series: true,
-      },
+      select: volumeSelect,
     });
   });
 
@@ -279,13 +278,7 @@ describe("volume mutations - update", () => {
       data: {
         title: "Tomo 1",
       },
-      include: {
-        series: true,
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: volumeSelect,
     });
   });
 

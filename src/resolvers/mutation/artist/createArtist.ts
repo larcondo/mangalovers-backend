@@ -4,6 +4,7 @@ import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
 import { handleUnknownError } from "@helpers/unknownErrors";
 import { AuthorizationError } from "@/helpers/auth";
+import { artistSelect } from "@constants/index";
 
 const createArtist = async (
   _: any,
@@ -19,10 +20,7 @@ const createArtist = async (
       data: {
         name,
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: artistSelect,
     });
     return artist;
   } catch (err) {

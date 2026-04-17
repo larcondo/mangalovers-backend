@@ -16,12 +16,14 @@ const createUser = async (
         password: hashedPassword,
         email,
       },
-      omit: {
-        password: true,
-        createdAt: true,
-        updatedAt: true,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
       },
     });
+
     return user;
   } catch (err) {
     handleUnknownError(err, "Create User failed");

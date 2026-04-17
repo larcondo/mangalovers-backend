@@ -5,6 +5,7 @@ import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
 import { UserInputError } from "@helpers/clientErrors";
+import { volumeSelect } from "@constants/index";
 
 const createVolume = async (
   _: any,
@@ -34,10 +35,9 @@ const createVolume = async (
         urlCover: args.urlCover,
         publicationDate: args.publicationDate,
       },
-      include: {
-        series: true,
-      },
+      select: volumeSelect,
     });
+
     return volume;
   } catch (err) {
     handleUnknownError(err, "Create Volume Mutation failed");

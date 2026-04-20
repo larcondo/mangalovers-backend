@@ -187,4 +187,66 @@ describe("series queries", () => {
     }
     expect(prismaMock.series.findUnique).toHaveBeenCalledTimes(1);
   });
+
+  it("search series", async () => {
+    const fakeSeries: TestSeries[] = [
+      {
+        id: "c4420408-af56-4e48-bd5e-c2abbdccf167",
+        name: "Attack on Titan",
+        isSingleVolume: false,
+        urlCover: "/series/attack-on-titan.jpg",
+        writer: {
+          id: 2,
+          name: "Hajime Isayama",
+        },
+        illustrator: {
+          id: 2,
+          name: "Hajime Isayama",
+        },
+        publisher: {
+          id: 3,
+          name: "Ovni Press",
+        },
+        printFormat: {
+          id: 5,
+          name: "Especial",
+          description: "Formato especial",
+        },
+      },
+    ];
+
+    prismaMock.series.findMany.mockResolvedValue(fakeSeries as any);
+
+    const result = await seriesQueries.searchSeries(null, { query: "AtTacK" });
+
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(1);
+      expect(result).toBe(fakeSeries);
+    }
+
+    expect(prismaMock.series.findMany).toHaveBeenCalledTimes(1);
+    expect(prismaMock.series.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: "attack",
+          mode: "insensitive",
+        },
+      },
+      select: seriesSelect,
+    });
+  });
+
+  it("search series fail if prisma fails", async () => {
+    prismaMock.series.findMany.mockRejectedValue(null);
+
+    try {
+      await seriesQueries.searchSeries(null, { query: "AtTacK" });
+    } catch (error) {
+      expect(error).toBeInstanceOf(GraphQLError);
+      const { message } = error as GraphQLError;
+      expect(message).toBe("Search Series failed");
+    }
+    expect(prismaMock.series.findMany).toHaveBeenCalledTimes(1);
+  });
 });

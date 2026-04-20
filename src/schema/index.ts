@@ -113,9 +113,11 @@ export const typeDefs = gql`
     allSeries: [Series]
     seriesQty: Int!
     seriesById(id: ID!): Series!
+    searchSeries(query: String!): [Series!]!
     allVolumes: [Volume]
     volumeQty: Int!
     volumeById(id: ID!): Volume!
+    volumesBySeries(seriesId: ID!): [Volume!]!
     userSeries: [UserSeries]
   }
 

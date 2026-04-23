@@ -16,7 +16,7 @@ const updateSeries = async (
     if (!AuthService.isUserAuthorized(context))
       throw new AuthorizationError("Forbidden action");
 
-    // Convert these fields to numbers
+    // Convert these fields to numbers (throw error if fail)
     const parsedArgs = parseIdsToInt(args.input, [
       "writerId",
       "illustratorId",
@@ -47,15 +47,3 @@ const updateSeries = async (
 };
 
 export default updateSeries;
-
-/*
-{
-  iId: string | undefined,
-  wId: string | undefined
-}
-{
-  iId: number | undefined,
-  wId: number | undefined
-}
-
-*/

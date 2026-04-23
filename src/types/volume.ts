@@ -27,7 +27,6 @@ export interface UpdateVolumeInput {
   urlCover?: string;
   synopsis?: string;
   publicationDate?: Date;
-  seriesId: string;
 }
 
 export interface UpdateVolumeArgs {

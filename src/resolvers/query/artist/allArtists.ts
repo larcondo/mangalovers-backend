@@ -1,5 +1,6 @@
 import { prisma } from "@/prisma";
 import { GraphQLError } from "graphql";
+import logger from "@services/logger";
 
 const allArtists = async () => {
   try {
@@ -15,7 +16,7 @@ const allArtists = async () => {
 
     return artists;
   } catch (err) {
-    console.log(err);
+    logger.log(err);
     throw new GraphQLError("Get All Artists failed");
   }
 };

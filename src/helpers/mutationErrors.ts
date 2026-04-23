@@ -1,4 +1,5 @@
 import { GraphQLError } from "graphql";
+import logger from "@services/logger";
 
 export const handleMutationError = (
   err: unknown,
@@ -6,7 +7,7 @@ export const handleMutationError = (
   message: string = "Internal Server Error",
 ) => {
   if (logError) {
-    console.log(err);
+    logger.log(err);
   }
 
   if (err instanceof GraphQLError) {

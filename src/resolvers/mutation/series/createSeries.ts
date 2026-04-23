@@ -5,6 +5,7 @@ import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
 import { AuthService } from "@services/auth";
 import { UserInputError } from "@helpers/clientErrors";
+import logger from "@services/logger";
 
 const isInt = (value: string): boolean => {
   return !isNaN(parseInt(value, 10)) && /^[0-9]+$/.test(value);
@@ -23,7 +24,7 @@ const createSeries = async (
     // Validation
     if (!isInt(args.illustratorId)) {
       throw new UserInputError(
-        "Invalid illustrator format. Must be Integer",
+        "Invalid illustratorId format. Must be Integer",
         "illustratorId",
       );
     }
@@ -72,7 +73,7 @@ const createSeries = async (
         updatedAt: true,
       },
     });
-    console.log(series);
+    logger.log(series);
     return series;
   } catch (err) {
     handleMutationError(err, true, "Create Series Mutation failed");

@@ -1,8 +1,8 @@
 import { prisma } from "@/prisma";
 import { AuthorizationError } from "@helpers/auth";
 import { Authorization } from "@types-app/user";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
+import { seriesSelect } from "@constants/index";
 
 const userSeries = async (_: any, args: any, context: Authorization) => {
   try {
@@ -15,28 +15,17 @@ const userSeries = async (_: any, args: any, context: Authorization) => {
       },
       select: {
         id: true,
+        active: true,
+        activatedAt: true,
+        deactivatedAt: true,
         series: {
-          include: {
-            writer: true,
-            illustrator: true,
-            publisher: true,
-            printFormat: true,
-          },
-          omit: {
-            createdAt: true,
-            updatedAt: true,
-          },
+          select: seriesSelect,
         },
       },
     });
     return records;
   } catch (err) {
-    logger.log(err);
-    if (err instanceof GraphQLError) {
-      throw err;
-    } else {
-      throw new GraphQLError("Get UserSeries failed");
-    }
+    handleUnknownError(err, "Get UserSeries failed");
   }
 };
 

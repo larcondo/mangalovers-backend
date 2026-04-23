@@ -1,10 +1,11 @@
 import { AuthorizationError } from "@/helpers/auth";
-import { handleMutationError } from "@/helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { prisma } from "@/prisma";
 import { AuthService } from "@/services/auth";
 import { UpdatePrintFormatArgs } from "@/types/printFormat";
 import { Authorization } from "@/types/user";
 import { parseSingleIntId } from "@utils/parsers";
+import { printFormatSelect } from "@constants/index";
 
 const updatePrintFormat = async (
   _: any,
@@ -21,15 +22,12 @@ const updatePrintFormat = async (
         id: parseSingleIntId(args.id, "printFormatId"),
       },
       data: args.input,
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: printFormatSelect,
     });
 
     return printFormat;
   } catch (err) {
-    handleMutationError(err, true, "Update PrintFormat Mutation failed");
+    handleUnknownError(err, "Update PrintFormat Mutation failed");
   }
 };
 

@@ -46,6 +46,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@config/*": ["./src/config/*"],
+      "@constants/*": ["./src/constants/*"],
       "@helpers/*": ["./src/helpers/*"],
       "@resolvers/*": ["./src/resolvers/*"],
       "@schema/*": ["./src/schema/*"],

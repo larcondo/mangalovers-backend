@@ -33,3 +33,11 @@ export interface UpdateVolumeArgs {
   id: string;
   input: UpdateVolumeInput;
 }
+
+export interface VolumeByIdArgs {
+  id: string;
+}
+
+export interface VolumesBySeriesArgs {
+  seriesId: string;
+}

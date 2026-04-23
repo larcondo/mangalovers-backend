@@ -1,7 +1,7 @@
 import { prisma } from "@/prisma";
 import { CreateUserArgs } from "@types-app/user";
 import { AuthService } from "@services/auth";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const createUser = async (
   _: any,
@@ -16,15 +16,17 @@ const createUser = async (
         password: hashedPassword,
         email,
       },
-      omit: {
-        password: true,
-        createdAt: true,
-        updatedAt: true,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
       },
     });
+
     return user;
   } catch (err) {
-    handleMutationError(err, true, "Create User failed");
+    handleUnknownError(err, "Create User failed");
   }
 };
 

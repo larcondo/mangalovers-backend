@@ -46,3 +46,7 @@ export interface UpdateSeriesArgs {
   id: string;
   input: UpdateSeriesInput;
 }
+
+export interface SeriesByIdArgs {
+  id: string;
+}

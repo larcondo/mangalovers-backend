@@ -2,7 +2,7 @@ import { prisma } from "@/prisma";
 import { JWTService } from "@services/jwt";
 import { LoginArgs, Roles } from "@types-app/user";
 import { AuthService } from "@services/auth";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { AuthenticationError } from "@helpers/auth";
 
 const login = async (_: any, { username, password }: LoginArgs) => {
@@ -44,7 +44,7 @@ const login = async (_: any, { username, password }: LoginArgs) => {
       isAdmin: user.role === Roles.Admin,
     };
   } catch (err) {
-    handleMutationError(err, true, "Login failed");
+    handleUnknownError(err, "Login failed");
   }
 };
 

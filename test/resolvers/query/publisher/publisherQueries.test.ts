@@ -1,6 +1,7 @@
 import { prismaMock } from "@test/jest.setup";
 import publisherQueries from "@/resolvers/query/publisher";
 import { GraphQLError } from "graphql";
+import { publisherSelect } from "@constants/index";
 
 describe("publisher queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -40,16 +41,16 @@ describe("publisher queries", () => {
 
     const result = await publisherQueries.allPublishers();
 
-    expect(result.length).toBe(fakePublishers.length);
-    expect(result).toBe(fakePublishers);
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(fakePublishers.length);
+      expect(result).toBe(fakePublishers);
+    }
     expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.publisher.findMany).toHaveBeenCalledWith({
+      select: publisherSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
   });
@@ -63,6 +64,45 @@ describe("publisher queries", () => {
       expect(error).toBeInstanceOf(GraphQLError);
       const { message } = error as GraphQLError;
       expect(message).toBe("Get All Publishers failed");
+    }
+    expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
+  });
+
+  it("search publishers", async () => {
+    const fakePublishers: PublisherBasic[] = [{ id: 2, name: "Panini" }];
+
+    prismaMock.publisher.findMany.mockResolvedValue(fakePublishers as any);
+
+    const result = await publisherQueries.searchPublishers(null, {
+      query: "Pani",
+    });
+
+    expect(result).toBeDefined();
+    if (result) {
+      expect(result.length).toBe(1);
+      expect(result).toBe(fakePublishers);
+    }
+    expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
+    expect(prismaMock.publisher.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: "pani",
+          mode: "insensitive",
+        },
+      },
+      select: publisherSelect,
+    });
+  });
+
+  it("search publishers fail if prisma fails", async () => {
+    prismaMock.publisher.findMany.mockRejectedValue(null);
+
+    try {
+      await publisherQueries.searchPublishers(null, { query: "Pani" });
+    } catch (error) {
+      expect(error).toBeInstanceOf(GraphQLError);
+      const { message } = error as GraphQLError;
+      expect(message).toBe("Search Publishers failed");
     }
     expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
   });

@@ -1,14 +1,12 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
 
 const volumeQty = async () => {
   try {
     const qty = await prisma.volume.count();
     return qty;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get Volumes Quantity failed");
+    handleUnknownError(err, "Get Volumes Quantity failed");
   }
 };
 

@@ -103,14 +103,21 @@ export const typeDefs = gql`
   type Query {
     allArtists: [Artist]
     artistQty: Int!
+    searchArtists(query: String!): [Artist!]!
     allPrintFormats: [PrintFormat]
     printFormatQty: Int!
+    searchPrintFormats(query: String!): [PrintFormat!]!
     allPublishers: [Publisher]
     publisherQty: Int!
+    searchPublishers(query: String!): [Publisher!]!
     allSeries: [Series]
     seriesQty: Int!
+    seriesById(id: ID!): Series!
+    searchSeries(query: String!): [Series!]!
     allVolumes: [Volume]
     volumeQty: Int!
+    volumeById(id: ID!): Volume!
+    volumesBySeries(seriesId: ID!): [Volume!]!
     userSeries: [UserSeries]
   }
 

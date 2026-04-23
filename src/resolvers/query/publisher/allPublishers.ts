@@ -1,22 +1,18 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
+import { publisherSelect } from "@constants/index";
 
 const allPublishers = async () => {
   try {
     const publishers = await prisma.publisher.findMany({
+      select: publisherSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
     return publishers;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get All Publishers failed");
+    handleUnknownError(err, "Get All Publishers failed");
   }
 };
 

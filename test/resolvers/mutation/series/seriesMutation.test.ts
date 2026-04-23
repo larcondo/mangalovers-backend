@@ -3,6 +3,7 @@ import seriesMutation from "@/resolvers/mutation/series";
 import { AuthorizationError } from "@/helpers/auth";
 import { GraphQLError } from "graphql";
 import { UserInputError } from "@/helpers/clientErrors";
+import { seriesSelect } from "@constants/index";
 
 describe("series mutations - create", () => {
   it("create series successfully", async () => {
@@ -57,16 +58,7 @@ describe("series mutations - create", () => {
         isSingleVolume: undefined,
         urlCover: fakeSeries.urlCover,
       },
-      include: {
-        illustrator: true,
-        writer: true,
-        printFormat: true,
-        publisher: true,
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: seriesSelect,
     });
   });
 
@@ -300,16 +292,7 @@ describe("series mutations - update", () => {
       data: {
         publisherId: 2,
       },
-      include: {
-        writer: true,
-        illustrator: true,
-        printFormat: true,
-        publisher: true,
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: seriesSelect,
     });
   });
 

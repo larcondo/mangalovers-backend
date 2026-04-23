@@ -2,8 +2,9 @@ import { prisma } from "@/prisma";
 import { CreateArtistArgs } from "@types-app/artist";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { AuthorizationError } from "@/helpers/auth";
+import { artistSelect } from "@constants/index";
 
 const createArtist = async (
   _: any,
@@ -19,14 +20,11 @@ const createArtist = async (
       data: {
         name,
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: artistSelect,
     });
     return artist;
   } catch (err) {
-    handleMutationError(err, true, "Create Artist Mutation failed");
+    handleUnknownError(err, "Create Artist Mutation failed");
   }
 };
 

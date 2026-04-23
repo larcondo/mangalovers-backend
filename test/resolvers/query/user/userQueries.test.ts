@@ -2,6 +2,7 @@ import { prismaMock, fakeUserPayload } from "@test/jest.setup";
 import userQueries from "@/resolvers/query/user";
 import { GraphQLError } from "graphql";
 import { AuthorizationError } from "@/helpers/auth";
+import { seriesSelect } from "@constants/index";
 
 describe("user queries", () => {
   it("user series successfully", async () => {
@@ -75,17 +76,11 @@ describe("user queries", () => {
       },
       select: {
         id: true,
+        active: true,
+        activatedAt: true,
+        deactivatedAt: true,
         series: {
-          include: {
-            writer: true,
-            illustrator: true,
-            publisher: true,
-            printFormat: true,
-          },
-          omit: {
-            createdAt: true,
-            updatedAt: true,
-          },
+          select: seriesSelect,
         },
       },
     });

@@ -1,22 +1,18 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
+import { printFormatSelect } from "@constants/index";
 
 const allPrintFormats = async () => {
   try {
     const printFormats = await prisma.printFormat.findMany({
+      select: printFormatSelect,
       orderBy: {
         createdAt: "desc",
-      },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
       },
     });
     return printFormats;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get All PrintFormats failed");
+    handleUnknownError(err, "Get All PrintFormats failed");
   }
 };
 

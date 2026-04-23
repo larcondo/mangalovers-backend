@@ -2,8 +2,9 @@ import { prisma } from "@/prisma";
 import { CreatePublisherArgs } from "@types-app/publisher";
 import { Authorization } from "@types-app/user";
 import { AuthorizationError } from "@helpers/auth";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { AuthService } from "@services/auth";
+import { publisherSelect } from "@constants/index";
 
 const createPublisher = async (
   _: any,
@@ -19,14 +20,11 @@ const createPublisher = async (
       data: {
         name,
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: publisherSelect,
     });
     return publisher;
   } catch (err) {
-    handleMutationError(err, true, "Create Publisher Mutation failed");
+    handleUnknownError(err, "Create Publisher Mutation failed");
   }
 };
 

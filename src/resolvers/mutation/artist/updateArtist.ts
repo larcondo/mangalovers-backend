@@ -1,10 +1,11 @@
 import { prisma } from "@/prisma";
 import { UpdateArtistArgs } from "@types-app/artist";
-import { handleMutationError } from "@helpers/mutationErrors";
+import { handleUnknownError } from "@helpers/unknownErrors";
 import { Authorization } from "@types-app/user";
 import { AuthService } from "@services/auth";
 import { AuthorizationError } from "@helpers/auth";
 import { parseSingleIntId } from "@utils/parsers";
+import { artistSelect } from "@constants/index";
 
 const updateArtist = async (
   _: any,
@@ -21,15 +22,12 @@ const updateArtist = async (
         id: parseSingleIntId(args.id, "artistId"),
       },
       data: args.input,
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: artistSelect,
     });
 
     return artist;
   } catch (err) {
-    handleMutationError(err, true, "Update Artist Mutation failed");
+    handleUnknownError(err, "Update Artist Mutation failed");
   }
 };
 

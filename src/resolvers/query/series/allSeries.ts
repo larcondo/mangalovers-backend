@@ -1,7 +1,7 @@
 import { prisma } from "@/prisma";
-import { GraphQLError } from "graphql";
 import { AllSeriesArgs } from "@types-app/series";
-import logger from "@services/logger";
+import { handleUnknownError } from "@helpers/unknownErrors";
+import { seriesSelect } from "@constants/index";
 
 const PAGE_LIMIT = 20;
 
@@ -12,26 +12,16 @@ const allSeries = async (_: any, args: AllSeriesArgs) => {
 
   try {
     const series = await prisma.series.findMany({
-      include: {
-        illustrator: true,
-        writer: true,
-        printFormat: true,
-        publisher: true,
-      },
+      select: seriesSelect,
       take: PAGE_LIMIT,
       skip: offset,
       orderBy: {
         createdAt: "desc",
       },
-      omit: {
-        createdAt: true,
-        updatedAt: true,
-      },
     });
     return series;
   } catch (err) {
-    logger.log(err);
-    throw new GraphQLError("Get All Series failed");
+    handleUnknownError(err, "Get All Series failed");
   }
 };
 

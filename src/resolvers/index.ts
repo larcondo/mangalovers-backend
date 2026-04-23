@@ -25,6 +25,7 @@ import userMutations from "./mutation/user";
 
 export const resolvers = {
   Query: {
+    version: () => "1.0.0",
     ...artistQueries,
     ...publisherQueries,
     ...printFormatQueries,
@@ -42,6 +43,7 @@ export const resolvers = {
     },
   },
   Mutation: {
+    version: () => "1.0.0",
     ...authMutations,
     ...artistMutations,
     ...publisherMutations,

@@ -2,23 +2,31 @@ import { prisma } from "@/prisma";
 import { AllVolumesArgs } from "@types-app/volume";
 import { handleUnknownError } from "@helpers/unknownErrors";
 import { volumeSelect } from "@constants/index";
-
-const PAGE_LIMIT = 20;
+import { VOLUMES_PAGE_LIMIT } from "@config/patination";
+import createPagination from "@helpers/patination";
 
 const allVolumes = async (_: any, args: AllVolumesArgs) => {
+  // If the page is not specified, a default value is used.
   const page = args.page ?? 1;
-  const offset = (page - 1) * PAGE_LIMIT;
 
   try {
+    const volumeQty = await prisma.volume.count();
+
+    const pagination = createPagination(page, volumeQty, VOLUMES_PAGE_LIMIT);
+
     const volumes = await prisma.volume.findMany({
       select: volumeSelect,
-      take: PAGE_LIMIT,
-      skip: offset,
+      take: VOLUMES_PAGE_LIMIT,
+      skip: pagination.offset,
       orderBy: {
         createdAt: "desc",
       },
     });
-    return volumes;
+
+    return {
+      pagination,
+      volumes,
+    };
   } catch (err) {
     handleUnknownError(err, "Get All Volumes failed");
   }

@@ -68,6 +68,40 @@ export const typeDefs = gql`
     deactivatedAt: Date
   }
 
+  type Pagination {
+    page: Int!
+    totalPages: Int!
+    totalEntries: Int
+    offset: Int!
+    hasNextPage: Boolean!
+    nextPage: Int
+  }
+
+  type ArtistsWithPagination {
+    artists: [Artist]
+    pagination: Pagination
+  }
+
+  type PrintFormatsWithPagination {
+    printFormats: [PrintFormat]
+    pagination: Pagination
+  }
+
+  type PublishersWithPagination {
+    publishers: [Publisher]
+    pagination: Pagination
+  }
+
+  type SeriesWithPagination {
+    series: [Series]
+    pagination: Pagination
+  }
+
+  type VolumesWithPagination {
+    volumes: [Volume]
+    pagination: Pagination
+  }
+
   input UpdateArtistInput {
     name: String
   }
@@ -101,20 +135,20 @@ export const typeDefs = gql`
   }
 
   type Query {
-    allArtists: [Artist]
+    allArtists: ArtistsWithPagination
     artistQty: Int!
     searchArtists(query: String!): [Artist!]!
-    allPrintFormats: [PrintFormat]
+    allPrintFormats: PrintFormatsWithPagination
     printFormatQty: Int!
     searchPrintFormats(query: String!): [PrintFormat!]!
-    allPublishers: [Publisher]
+    allPublishers: PublishersWithPagination
     publisherQty: Int!
     searchPublishers(query: String!): [Publisher!]!
-    allSeries: [Series]
+    allSeries(page: Int): SeriesWithPagination
     seriesQty: Int!
     seriesById(id: ID!): Series!
     searchSeries(query: String!): [Series!]!
-    allVolumes: [Volume]
+    allVolumes(page: Int): VolumesWithPagination
     volumeQty: Int!
     volumeById(id: ID!): Volume!
     volumesBySeries(seriesId: ID!): [Volume!]!

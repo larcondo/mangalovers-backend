@@ -10,7 +10,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "es2023",
-    // "types": [],
+    "types": ["node", "jest"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -42,17 +42,18 @@
     // "moduleDetection": "force",
     "skipLibCheck": true,
 
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@config/*": ["src/config/*"],
-      "@helpers/*": ["src/helpers/*"],
-      "@resolvers/*": ["src/resolvers/*"],
-      "@schema/*": ["src/schema/*"],
-      "@services/*": ["src/services/*"],
-      "@types-app/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"],
-      "@test/*": ["test/*"]
+      "@/*": ["./src/*"],
+      "@config/*": ["./src/config/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@resolvers/*": ["./src/resolvers/*"],
+      "@schema/*": ["./src/schema/*"],
+      "@services/*": ["./src/services/*"],
+      "@types-app/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"],
+      "generated/*": ["./generated/*"],
+      "@test/*": ["./test/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true

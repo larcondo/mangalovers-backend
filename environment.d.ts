@@ -6,6 +6,7 @@ declare global {
       JWT_ACCESS_TOKEN_SECRET: string;
       JWT_EXPIRES_IN: string;
       PORT: string;
+      UPLOADS_FOLDER_NAME: string;
     }
   }
 }

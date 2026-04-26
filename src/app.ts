@@ -1,11 +1,9 @@
 import express from "express";
 import cors from "cors";
-import logger from "./services/logger";
-import path from "path";
-import fs from "fs/promises";
-import { uploadsPath } from "./services/uploads";
 import config from "./config/config";
 import uploadMiddleware from "./middlewares/upload";
+import uploadSeriesCovers from "./controllers/uploadSeriesCovers";
+import uploadVolumesCovers from "./controllers/uploadVolumesCovers";
 
 const app = express();
 
@@ -27,52 +25,8 @@ app.get("/version", (_, res) => {
   });
 });
 
-app.post("/series", uploadMiddleware, async (req, res) => {
-  try {
-    const file = req.file as Express.Multer.File;
+app.post("/series", uploadMiddleware, uploadSeriesCovers);
 
-    const fileName = `${new Date().getTime()}-${file.originalname}`;
-
-    const filePath = path.join(uploadsPath, "series", fileName);
-
-    // Save file to disk
-    await fs.writeFile(filePath, file.buffer);
-
-    logger.log(`[${new Date().toISOString()}]`, "File saved:", filePath);
-
-    res.status(201).send({
-      message: "File upload successfully",
-      filename: fileName,
-      size: file.size,
-      url: `/covers/series/${fileName}`,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Error on upload cover." });
-  }
-});
-
-app.post("/volumes", uploadMiddleware, async (req, res) => {
-  try {
-    const file = req.file as Express.Multer.File;
-
-    const fileName = `${new Date().getTime()}-${file.originalname}`;
-
-    const filePath = path.join(uploadsPath, "volumes", fileName);
-
-    // Save file to disk
-    await fs.writeFile(filePath, file.buffer);
-
-    logger.log(`[${new Date().toISOString()}]`, "File saved:", filePath);
-
-    res.status(201).send({
-      message: "File upload successfully",
-      filename: fileName,
-      size: file.size,
-      url: `/covers/volumes/${fileName}`,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Error on upload cover." });
-  }
-});
+app.post("/volumes", uploadMiddleware, uploadVolumesCovers);
 
 export default app;

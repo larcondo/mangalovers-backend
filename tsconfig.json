@@ -47,6 +47,7 @@
       "@/*": ["./src/*"],
       "@config/*": ["./src/config/*"],
       "@constants/*": ["./src/constants/*"],
+      "@controllers/*": ["./src/controllers/*"],
       "@helpers/*": ["./src/helpers/*"],
       "@resolvers/*": ["./src/resolvers/*"],
       "@schema/*": ["./src/schema/*"],

@@ -3,6 +3,7 @@ import seriesQueries from "@/resolvers/query/series";
 import { GraphQLError } from "graphql";
 import { seriesSelect } from "@constants/index";
 import { UserInputError } from "@/helpers/clientErrors";
+import { SERIES_PAGE_LIMIT } from "@config/patination";
 
 describe("series queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -80,19 +81,29 @@ describe("series queries", () => {
       },
     ];
 
+    prismaMock.series.count.mockResolvedValue(fakeSeries.length);
     prismaMock.series.findMany.mockResolvedValue(fakeSeries as any);
 
     const result = await seriesQueries.allSeries(null, { page: 1 });
 
     expect(result).toBeDefined();
     if (result) {
-      expect(result.length).toBe(2);
-      expect(result).toBe(fakeSeries);
+      const { series, pagination } = result;
+      expect(pagination).toBeDefined();
+      expect(series.length).toBe(2);
+      expect(series).toBe(fakeSeries);
+      expect(pagination.page).toBe(1);
+      expect(pagination.offset).toBe(0);
+      expect(pagination.totalPages).toBe(1);
+      expect(pagination.totalEntries).toBe(fakeSeries.length);
+      expect(pagination.hasNextPage).toBe(false);
+      expect(pagination.nextPage).toBeNull();
     }
+    expect(prismaMock.series.count).toHaveBeenCalledTimes(1);
     expect(prismaMock.series.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.series.findMany).toHaveBeenCalledWith({
       select: seriesSelect,
-      take: 20,
+      take: SERIES_PAGE_LIMIT,
       skip: 0,
       orderBy: {
         createdAt: "desc",

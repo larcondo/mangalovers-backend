@@ -154,18 +154,31 @@ describe("GraphQL Endpoints", () => {
     it("should return all artists", async () => {
       const response = await request(app).post("/graphql").send({
         query: QUERIES.ALL_ARTISTS,
+        variables: { page: 1 },
       });
 
       const {
         body: { errors, data },
       } = response;
+
       expect(response.status).toBe(200);
       expect(errors).toBeUndefined();
       expect(data.allArtists).toBeDefined();
-      expect(data.allArtists.length).toBe(1);
-      expect(data.allArtists[0]).toStrictEqual({
+      const { artists, pagination } = data.allArtists;
+      expect(artists).toBeDefined();
+      expect(pagination).toBeDefined();
+      expect(artists.length).toBe(1);
+      expect(artists[0]).toStrictEqual({
         id: "1",
         name: "Takehiko Inoue",
+      });
+      expect(pagination).toStrictEqual({
+        page: 1,
+        totalPages: 1,
+        totalEntries: 1,
+        offset: 0,
+        hasNextPage: false,
+        nextPage: null,
       });
     });
 
@@ -250,6 +263,7 @@ describe("GraphQL Endpoints", () => {
     it("should return all publishers", async () => {
       const response = await request(app).post("/graphql").send({
         query: QUERIES.ALL_PUBLISHERS,
+        variables: { page: 1 },
       });
 
       const {
@@ -258,10 +272,21 @@ describe("GraphQL Endpoints", () => {
       expect(response.status).toBe(200);
       expect(errors).toBeUndefined();
       expect(data.allPublishers).toBeDefined();
-      expect(data.allPublishers.length).toBe(1);
-      expect(data.allPublishers[0]).toStrictEqual({
+      const { publishers, pagination } = data.allPublishers;
+      expect(publishers).toBeDefined();
+      expect(pagination).toBeDefined();
+      expect(publishers.length).toBe(1);
+      expect(publishers[0]).toStrictEqual({
         id: "1",
         name: "Ovni Press",
+      });
+      expect(pagination).toStrictEqual({
+        page: 1,
+        totalPages: 1,
+        totalEntries: 1,
+        offset: 0,
+        hasNextPage: false,
+        nextPage: null,
       });
     });
 
@@ -351,6 +376,7 @@ describe("GraphQL Endpoints", () => {
     it("should return all printFormats", async () => {
       const response = await request(app).post("/graphql").send({
         query: QUERIES.ALL_PRINT_FORMATS,
+        variables: { page: 1 },
       });
 
       const {
@@ -359,12 +385,22 @@ describe("GraphQL Endpoints", () => {
       expect(response.status).toBe(200);
       expect(errors).toBeUndefined();
       expect(data.allPrintFormats).toBeDefined();
-      expect(data.allPrintFormats.length).toBe(1);
-      expect(data.allPrintFormats[0].name).toBe("Tankobon");
-      expect(data.allPrintFormats[0]).toStrictEqual({
+      const { printFormats, pagination } = data.allPrintFormats;
+      expect(printFormats).toBeDefined();
+      expect(pagination).toBeDefined();
+      expect(printFormats.length).toBe(1);
+      expect(printFormats[0]).toStrictEqual({
         id: "1",
         name: "Tankobon",
         description: "Tamaño más pequeño",
+      });
+      expect(pagination).toStrictEqual({
+        page: 1,
+        totalPages: 1,
+        totalEntries: 1,
+        offset: 0,
+        hasNextPage: false,
+        nextPage: null,
       });
     });
 
@@ -477,6 +513,7 @@ describe("GraphQL Endpoints", () => {
     it("should return all series", async () => {
       const response = await request(app).post("/graphql").send({
         query: QUERIES.ALL_SERIES,
+        variables: { page: 1 },
       });
 
       const {
@@ -485,8 +522,19 @@ describe("GraphQL Endpoints", () => {
       expect(response.status).toBe(200);
       expect(errors).toBeUndefined();
       expect(data.allSeries).toBeDefined();
-      expect(data.allSeries.length).toBe(1);
-      expect(data.allSeries[0].name).toBe("Slam Dunk");
+      const { series, pagination } = data.allSeries;
+      expect(series).toBeDefined();
+      expect(pagination).toBeDefined();
+      expect(series.length).toBe(1);
+      expect(series[0].name).toBe("Slam Dunk");
+      expect(pagination).toStrictEqual({
+        page: 1,
+        totalPages: 1,
+        totalEntries: 1,
+        offset: 0,
+        hasNextPage: false,
+        nextPage: null,
+      });
     });
 
     it("should update an existing series", async () => {
@@ -584,6 +632,7 @@ describe("GraphQL Endpoints", () => {
     it("should return all volumes", async () => {
       const response = await request(app).post("/graphql").send({
         query: QUERIES.ALL_VOLUMES,
+        variables: { page: 1 },
       });
 
       const {
@@ -592,10 +641,21 @@ describe("GraphQL Endpoints", () => {
       expect(response.status).toBe(200);
       expect(errors).toBeUndefined();
       expect(data.allVolumes).toBeDefined();
-      expect(data.allVolumes.length).toBe(1);
-      expect(data.allVolumes[0].number).toBe(1);
-      expect(data.allVolumes[0].title).toBe("Volumen 1");
-      expect(data.allVolumes[0].publicationDate).toMatch(isoRegex);
+      const { volumes, pagination } = data.allVolumes;
+      expect(volumes).toBeDefined();
+      expect(pagination).toBeDefined();
+      expect(volumes.length).toBe(1);
+      expect(volumes[0].number).toBe(1);
+      expect(volumes[0].title).toBe("Volumen 1");
+      expect(volumes[0].publicationDate).toMatch(isoRegex);
+      expect(pagination).toStrictEqual({
+        page: 1,
+        totalPages: 1,
+        totalEntries: 1,
+        offset: 0,
+        hasNextPage: false,
+        nextPage: null,
+      });
     });
 
     it("should update an existing volume", async () => {

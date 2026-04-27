@@ -4,6 +4,10 @@ export type PrintFormat = {
   description?: string;
 };
 
+export interface AllPrintFormatsArgs {
+  page?: number;
+}
+
 export interface CreatePrintFormat {
   name: string;
   description?: string;

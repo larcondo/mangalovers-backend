@@ -4,6 +4,7 @@ import config from "./config/config";
 import uploadMiddleware from "./middlewares/upload";
 import uploadSeriesCovers from "./controllers/uploadSeriesCovers";
 import uploadVolumesCovers from "./controllers/uploadVolumesCovers";
+import authMiddleware from "./middlewares/auth";
 
 const app = express();
 
@@ -25,8 +26,8 @@ app.get("/version", (_, res) => {
   });
 });
 
-app.post("/series", uploadMiddleware, uploadSeriesCovers);
+app.post("/series", authMiddleware, uploadMiddleware, uploadSeriesCovers);
 
-app.post("/volumes", uploadMiddleware, uploadVolumesCovers);
+app.post("/volumes", authMiddleware, uploadMiddleware, uploadVolumesCovers);
 
 export default app;

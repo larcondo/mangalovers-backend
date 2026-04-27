@@ -3,9 +3,14 @@ import fs from "fs/promises";
 import logger from "@services/logger";
 import { Request, Response } from "express";
 import { uploadsPath } from "@services/uploads";
+import { Roles } from "@types-app/user";
 
 const uploadSeriesCovers = async (req: Request, res: Response) => {
   try {
+    if (!req.user || req.user.role !== Roles.Admin) {
+      return res.status(403).json({ message: "Forbidden action." });
+    }
+
     const file = req.file as Express.Multer.File;
 
     const fileName = `${new Date().getTime()}-${file.originalname}`;

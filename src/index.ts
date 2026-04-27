@@ -5,8 +5,11 @@ import { server, httpServer } from "./server";
 import app from "./app";
 import { expressMiddleware } from "@as-integrations/express5";
 import { apolloContext } from "./context";
+import { initUploads } from "./services/uploads";
 
 const PORT = config.PORT;
+
+await initUploads();
 
 // We must call and await server.start() before using the integration.
 await server.start();

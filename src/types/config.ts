@@ -6,6 +6,7 @@ export interface EnvironmentVars {
   TEST_DATABASE_URL: string | undefined;
   JWT_EXPIRES_IN: number | StringValue | undefined;
   JWT_ACCESS_TOKEN_SECRET: string | undefined;
+  UPLOADS_FOLDER_NAME: string | undefined;
 }
 
 export interface Config {
@@ -14,4 +15,5 @@ export interface Config {
   TEST_DATABASE_URL: string;
   JWT_EXPIRES_IN: number | StringValue;
   JWT_ACCESS_TOKEN_SECRET: string;
+  UPLOADS_FOLDER_NAME: string;
 }

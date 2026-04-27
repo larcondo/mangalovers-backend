@@ -1,15 +1,14 @@
 import { prisma } from "@/prisma";
 import request from "supertest";
-import { ApolloServer } from "@apollo/server";
-import { Authorization } from "@/types/user";
-import { startApolloServer } from "@/server";
+import app from "@/app";
+import { server } from "@/server";
 import { AuthService } from "@services/auth";
 import MUTATIONS from "./mutations";
 import QUERIES from "./queries";
+import { expressMiddleware } from "@as-integrations/express5";
+import { apolloContext } from "@/context";
 
 describe("GraphQL Endpoints", () => {
-  let server: ApolloServer<Authorization>;
-  let url: string;
   let seriesId: string;
   // Matches ISO format
   const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
@@ -40,9 +39,11 @@ describe("GraphQL Endpoints", () => {
       },
     });
 
-    const status = await startApolloServer(0);
-    url = status.url;
-    server = status.server;
+    // Start Apollo Server
+    await server.start();
+
+    // Set up express integration with apollo server
+    app.use("/graphql", expressMiddleware(server, { context: apolloContext }));
   });
 
   afterAll(async () => {
@@ -57,7 +58,7 @@ describe("GraphQL Endpoints", () => {
       email: "dummy@gmail.com",
     };
 
-    const response = await request(url).post("/").send({
+    const response = await request(app).post("/graphql").send({
       query: MUTATIONS.REGISTER,
       variables,
     });
@@ -76,7 +77,7 @@ describe("GraphQL Endpoints", () => {
   it("should login a user", async () => {
     const variables = { username: "demou", password: "sekret1" };
 
-    const response = await request(url).post("/").send({
+    const response = await request(app).post("/graphql").send({
       query: MUTATIONS.LOGIN,
       variables,
     });
@@ -106,8 +107,8 @@ describe("GraphQL Endpoints", () => {
       // login (para el token)
       const {
         body: { data },
-      } = await request(url)
-        .post("/")
+      } = await request(app)
+        .post("/graphql")
         .send({
           query: MUTATIONS.LOGIN,
           variables: {
@@ -121,8 +122,8 @@ describe("GraphQL Endpoints", () => {
 
     it("should create an artist", async () => {
       const variables = { name: "Takehiko Inoue" };
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.CREATE_ARTIST, variables });
 
@@ -137,7 +138,7 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return artist qty", async () => {
-      const response = await request(url).post("/").send({
+      const response = await request(app).post("/graphql").send({
         query: QUERIES.ARTIST_QTY,
       });
 
@@ -151,12 +152,10 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return all artists", async () => {
-      const response = await request(url)
-        .post("/")
-        .send({
-          query: QUERIES.ALL_ARTISTS,
-          variables: { page: 1 },
-        });
+      const response = await request(app).post("/graphql").send({
+        query: QUERIES.ALL_ARTISTS,
+        variables: { page: 1 },
+      });
 
       const {
         body: { errors, data },
@@ -185,8 +184,8 @@ describe("GraphQL Endpoints", () => {
 
     it("should update an existing artist", async () => {
       const variables = { id: "1", input: { name: "Inoue Takehiko" } };
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.UPDATE_ARTIST, variables });
 
@@ -215,8 +214,8 @@ describe("GraphQL Endpoints", () => {
       // login (para el token)
       const {
         body: { data },
-      } = await request(url)
-        .post("/")
+      } = await request(app)
+        .post("/graphql")
         .send({
           query: MUTATIONS.LOGIN,
           variables: {
@@ -230,8 +229,8 @@ describe("GraphQL Endpoints", () => {
 
     it("should create a publisher", async () => {
       const variables = { name: "Ovni Press" };
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.CREATE_PUBLISHER, variables });
 
@@ -248,7 +247,7 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return publisher qty", async () => {
-      const response = await request(url).post("/").send({
+      const response = await request(app).post("/graphql").send({
         query: QUERIES.PUBLISHER_QTY,
       });
 
@@ -262,12 +261,10 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return all publishers", async () => {
-      const response = await request(url)
-        .post("/")
-        .send({
-          query: QUERIES.ALL_PUBLISHERS,
-          variables: { page: 1 },
-        });
+      const response = await request(app).post("/graphql").send({
+        query: QUERIES.ALL_PUBLISHERS,
+        variables: { page: 1 },
+      });
 
       const {
         body: { errors, data },
@@ -295,8 +292,8 @@ describe("GraphQL Endpoints", () => {
 
     it("should update an existing publisher", async () => {
       const variables = { id: "1", input: { name: "Ivrea" } };
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.UPDATE_PUBLISHER, variables });
 
@@ -325,8 +322,8 @@ describe("GraphQL Endpoints", () => {
       // login (para el token)
       const {
         body: { data },
-      } = await request(url)
-        .post("/")
+      } = await request(app)
+        .post("/graphql")
         .send({
           query: MUTATIONS.LOGIN,
           variables: {
@@ -344,8 +341,8 @@ describe("GraphQL Endpoints", () => {
         description: "Tamaño más pequeño",
       };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.CREATE_PRINT_FORMAT, variables });
 
@@ -363,7 +360,7 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return printFormat qty", async () => {
-      const response = await request(url).post("/").send({
+      const response = await request(app).post("/graphql").send({
         query: QUERIES.PRINT_FORMAT_QTY,
       });
 
@@ -377,12 +374,10 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return all printFormats", async () => {
-      const response = await request(url)
-        .post("/")
-        .send({
-          query: QUERIES.ALL_PRINT_FORMATS,
-          variables: { page: 1 },
-        });
+      const response = await request(app).post("/graphql").send({
+        query: QUERIES.ALL_PRINT_FORMATS,
+        variables: { page: 1 },
+      });
 
       const {
         body: { errors, data },
@@ -411,8 +406,8 @@ describe("GraphQL Endpoints", () => {
 
     it("should update an existing printFormat", async () => {
       const variables = { id: "1", input: { name: "Tankoubon" } };
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.UPDATE_PRINT_FORMAT, variables });
 
@@ -442,8 +437,8 @@ describe("GraphQL Endpoints", () => {
       // login (para el token)
       const {
         body: { data },
-      } = await request(url)
-        .post("/")
+      } = await request(app)
+        .post("/graphql")
         .send({
           query: MUTATIONS.LOGIN,
           variables: {
@@ -466,8 +461,8 @@ describe("GraphQL Endpoints", () => {
         isSingleVolume: false,
       };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.CREATE_SERIES, variables });
 
@@ -502,7 +497,7 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return series qty", async () => {
-      const response = await request(url).post("/").send({
+      const response = await request(app).post("/graphql").send({
         query: QUERIES.SERIES_QTY,
       });
 
@@ -516,12 +511,10 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return all series", async () => {
-      const response = await request(url)
-        .post("/")
-        .send({
-          query: QUERIES.ALL_SERIES,
-          variables: { page: 1 },
-        });
+      const response = await request(app).post("/graphql").send({
+        query: QUERIES.ALL_SERIES,
+        variables: { page: 1 },
+      });
 
       const {
         body: { errors, data },
@@ -553,8 +546,8 @@ describe("GraphQL Endpoints", () => {
         },
       };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.UPDATE_SERIES, variables });
 
@@ -580,8 +573,8 @@ describe("GraphQL Endpoints", () => {
       // login (para el token)
       const {
         body: { data },
-      } = await request(url)
-        .post("/")
+      } = await request(app)
+        .post("/graphql")
         .send({
           query: MUTATIONS.LOGIN,
           variables: {
@@ -603,8 +596,8 @@ describe("GraphQL Endpoints", () => {
         publicationDate: "2024-03-14",
       };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.CREATE_VOLUME, variables });
 
@@ -623,7 +616,7 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return volume qty", async () => {
-      const response = await request(url).post("/").send({
+      const response = await request(app).post("/graphql").send({
         query: QUERIES.VOLUME_QTY,
       });
 
@@ -637,12 +630,10 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return all volumes", async () => {
-      const response = await request(url)
-        .post("/")
-        .send({
-          query: QUERIES.ALL_VOLUMES,
-          variables: { page: 1 },
-        });
+      const response = await request(app).post("/graphql").send({
+        query: QUERIES.ALL_VOLUMES,
+        variables: { page: 1 },
+      });
 
       const {
         body: { errors, data },
@@ -676,8 +667,8 @@ describe("GraphQL Endpoints", () => {
         },
       };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.UPDATE_VOLUME, variables });
 
@@ -704,8 +695,8 @@ describe("GraphQL Endpoints", () => {
       // login (para el token)
       const {
         body: { data },
-      } = await request(url)
-        .post("/")
+      } = await request(app)
+        .post("/graphql")
         .send({
           query: MUTATIONS.LOGIN,
           variables: {
@@ -720,8 +711,8 @@ describe("GraphQL Endpoints", () => {
     it("should set a user series", async () => {
       const variables = { seriesId };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.SET_USER_SERIES, variables });
 
@@ -740,8 +731,8 @@ describe("GraphQL Endpoints", () => {
     });
 
     it("should return all user series", async () => {
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: QUERIES.USER_SERIES });
 
@@ -783,8 +774,8 @@ describe("GraphQL Endpoints", () => {
     it("should unset a user series", async () => {
       const variables = { seriesId };
 
-      const response = await request(url)
-        .post("/")
+      const response = await request(app)
+        .post("/graphql")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ query: MUTATIONS.UNSET_USER_SERIES, variables });
 

@@ -1,27 +1,18 @@
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
 import { typeDefs } from "@schema/index";
 import { resolvers } from "@resolvers/index";
-import { JWTService } from "@services/jwt";
+import http from "http";
+import app from "./app";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
-export const server = new ApolloServer({
+// Below, we tell Apollo Server to "drain" this httpServer,
+// enabling our servers to shut down gracefully.
+const httpServer = http.createServer(app);
+
+const server = new ApolloServer({
   typeDefs,
   resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-export async function startApolloServer(port: number = 4000) {
-  const { url } = await startStandaloneServer(server, {
-    context: async ({ req }) => {
-      const auth = req ? req.headers.authorization : null;
-      const currentUser =
-        auth && auth.startsWith("Bearer ")
-          ? JWTService.verifyAccessToken(auth.substring(7))
-          : null;
-      return { currentUser };
-    },
-    listen: {
-      port,
-    },
-  });
-  return { url, server };
-}
+export { server, httpServer };

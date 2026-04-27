@@ -2,6 +2,7 @@ import { prismaMock } from "@test/jest.setup";
 import artistQueries from "@/resolvers/query/artist";
 import { GraphQLError } from "graphql";
 import { artistSelect } from "@constants/index";
+import { ARTISTS_PAGE_LIMIT } from "@config/patination";
 
 describe("artist queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -42,18 +43,30 @@ describe("artist queries", () => {
       },
     ];
 
+    prismaMock.artist.count.mockResolvedValue(fakeArtists.length);
     prismaMock.artist.findMany.mockResolvedValue(fakeArtists as any);
 
-    const result = await artistQueries.allArtists();
+    const result = await artistQueries.allArtists(null, { page: 1 });
 
     expect(result).toBeDefined();
     if (result) {
-      expect(result.length).toBe(2);
-      expect(result).toBe(fakeArtists);
+      const { artists, pagination } = result;
+      expect(pagination).toBeDefined();
+      expect(artists.length).toBe(2);
+      expect(artists).toBe(fakeArtists);
+      expect(pagination.page).toBe(1);
+      expect(pagination.offset).toBe(0);
+      expect(pagination.totalPages).toBe(1);
+      expect(pagination.totalEntries).toBe(fakeArtists.length);
+      expect(pagination.hasNextPage).toBe(false);
+      expect(pagination.nextPage).toBeNull();
     }
+    expect(prismaMock.artist.count).toHaveBeenCalledTimes(1);
     expect(prismaMock.artist.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.artist.findMany).toHaveBeenCalledWith({
       select: artistSelect,
+      take: ARTISTS_PAGE_LIMIT,
+      skip: 0,
       orderBy: {
         createdAt: "desc",
       },
@@ -64,7 +77,7 @@ describe("artist queries", () => {
     prismaMock.artist.findMany.mockRejectedValue(null);
 
     try {
-      await artistQueries.allArtists();
+      await artistQueries.allArtists(null, { page: 1 });
     } catch (error) {
       expect(error).toBeInstanceOf(GraphQLError);
       const { message } = error as GraphQLError;

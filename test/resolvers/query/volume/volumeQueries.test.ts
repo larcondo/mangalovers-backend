@@ -3,6 +3,7 @@ import volumeQueries from "@/resolvers/query/volume";
 import { GraphQLError } from "graphql";
 import { volumeSelect } from "@constants/index";
 import { UserInputError } from "@/helpers/clientErrors";
+import { VOLUMES_PAGE_LIMIT } from "@config/patination";
 
 describe("volume queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -93,19 +94,29 @@ describe("volume queries", () => {
       },
     ];
 
+    prismaMock.volume.count.mockResolvedValue(fakeVolumes.length);
     prismaMock.volume.findMany.mockResolvedValue(fakeVolumes as any);
 
     const result = await volumeQueries.allVolumes(null, { page: 1 });
 
     expect(result).toBeDefined();
     if (result) {
-      expect(result.length).toBe(fakeVolumes.length);
-      expect(result).toBe(fakeVolumes);
+      const { volumes, pagination } = result;
+      expect(volumes.length).toBe(fakeVolumes.length);
+      expect(volumes).toBe(fakeVolumes);
+      expect(pagination).toBeDefined();
+      expect(pagination.page).toBe(1);
+      expect(pagination.offset).toBe(0);
+      expect(pagination.totalPages).toBe(1);
+      expect(pagination.totalEntries).toBe(fakeVolumes.length);
+      expect(pagination.hasNextPage).toBe(false);
+      expect(pagination.nextPage).toBeNull();
     }
+    expect(prismaMock.volume.count).toHaveBeenCalledTimes(1);
     expect(prismaMock.volume.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.volume.findMany).toHaveBeenCalledWith({
       select: volumeSelect,
-      take: 20,
+      take: VOLUMES_PAGE_LIMIT,
       skip: 0,
       orderBy: {
         createdAt: "desc",

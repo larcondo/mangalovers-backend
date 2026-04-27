@@ -3,6 +3,10 @@ export type Artist = {
   name: string;
 };
 
+export interface AllArtistsArgs {
+  page?: number;
+}
+
 export interface CreateArtistArgs {
   name: string;
 }

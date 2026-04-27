@@ -2,6 +2,7 @@ import { prismaMock } from "@test/jest.setup";
 import publisherQueries from "@/resolvers/query/publisher";
 import { GraphQLError } from "graphql";
 import { publisherSelect } from "@constants/index";
+import { PUBLISHERS_PAGE_LIMIT } from "@config/patination";
 
 describe("publisher queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -37,18 +38,30 @@ describe("publisher queries", () => {
       { id: 3, name: "Ovni Press" },
     ];
 
+    prismaMock.publisher.count.mockResolvedValue(fakePublishers.length);
     prismaMock.publisher.findMany.mockResolvedValue(fakePublishers as any);
 
-    const result = await publisherQueries.allPublishers();
+    const result = await publisherQueries.allPublishers(null, { page: 1 });
 
     expect(result).toBeDefined();
     if (result) {
-      expect(result.length).toBe(fakePublishers.length);
-      expect(result).toBe(fakePublishers);
+      const { publishers, pagination } = result;
+      expect(pagination).toBeDefined();
+      expect(publishers.length).toBe(fakePublishers.length);
+      expect(publishers).toBe(fakePublishers);
+      expect(pagination.page).toBe(1);
+      expect(pagination.offset).toBe(0);
+      expect(pagination.totalPages).toBe(1);
+      expect(pagination.totalEntries).toBe(fakePublishers.length);
+      expect(pagination.hasNextPage).toBe(false);
+      expect(pagination.nextPage).toBeNull();
     }
+    expect(prismaMock.publisher.count).toHaveBeenCalledTimes(1);
     expect(prismaMock.publisher.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.publisher.findMany).toHaveBeenCalledWith({
       select: publisherSelect,
+      take: PUBLISHERS_PAGE_LIMIT,
+      skip: 0,
       orderBy: {
         createdAt: "desc",
       },
@@ -59,7 +72,7 @@ describe("publisher queries", () => {
     prismaMock.publisher.findMany.mockRejectedValue(null);
 
     try {
-      await publisherQueries.allPublishers();
+      await publisherQueries.allPublishers(null, { page: 1 });
     } catch (error) {
       expect(error).toBeInstanceOf(GraphQLError);
       const { message } = error as GraphQLError;

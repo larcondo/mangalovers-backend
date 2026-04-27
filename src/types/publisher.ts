@@ -3,6 +3,10 @@ export type Publisher = {
   name: string;
 };
 
+export interface AllPublishersArgs {
+  page?: number;
+}
+
 export interface CreatePublisherArgs {
   name: string;
 }

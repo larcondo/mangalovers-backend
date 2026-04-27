@@ -2,24 +2,39 @@ import { prisma } from "@/prisma";
 import { AllSeriesArgs } from "@types-app/series";
 import { handleUnknownError } from "@helpers/unknownErrors";
 import { seriesSelect } from "@constants/index";
-
-const PAGE_LIMIT = 20;
+import { SERIES_PAGE_LIMIT } from "@config/patination";
+import createPagination from "@helpers/patination";
+import { UserInputError } from "@helpers/clientErrors";
 
 const allSeries = async (_: any, args: AllSeriesArgs) => {
+  // If the page is not specified, a default value is used.
   const page = args.page ?? 1;
 
-  const offset = (page - 1) * PAGE_LIMIT;
-
   try {
+    if (page < 1) {
+      throw new UserInputError(
+        `Wrong page value: ${page}. It must be integer greater or equal than 1`,
+        "page",
+      );
+    }
+
+    const seriesQty = await prisma.series.count();
+
+    const pagination = createPagination(page, seriesQty, SERIES_PAGE_LIMIT);
+
     const series = await prisma.series.findMany({
       select: seriesSelect,
-      take: PAGE_LIMIT,
-      skip: offset,
+      take: SERIES_PAGE_LIMIT,
+      skip: pagination.offset,
       orderBy: {
         createdAt: "desc",
       },
     });
-    return series;
+
+    return {
+      pagination,
+      series,
+    };
   } catch (err) {
     handleUnknownError(err, "Get All Series failed");
   }

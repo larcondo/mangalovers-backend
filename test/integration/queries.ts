@@ -12,8 +12,18 @@ const ARTIST_QTY = gql`
 const ALL_ARTISTS = gql`
   query AllArtists {
     allArtists {
-      id
-      name
+      artists {
+        id
+        name
+      }
+      pagination {
+        page
+        totalPages
+        totalEntries
+        offset
+        hasNextPage
+        nextPage
+      }
     }
   }
 `;
@@ -30,8 +40,18 @@ const PUBLISHER_QTY = gql`
 const ALL_PUBLISHERS = gql`
   query AllPublishers {
     allPublishers {
-      id
-      name
+      publishers {
+        id
+        name
+      }
+      pagination {
+        page
+        totalPages
+        totalEntries
+        offset
+        hasNextPage
+        nextPage
+      }
     }
   }
 `;
@@ -48,9 +68,19 @@ const PRINT_FORMAT_QTY = gql`
 const ALL_PRINT_FORMATS = gql`
   query AllPrintFormats {
     allPrintFormats {
-      id
-      name
-      description
+      printFormats {
+        id
+        name
+        description
+      }
+      pagination {
+        page
+        totalPages
+        totalEntries
+        offset
+        hasNextPage
+        nextPage
+      }
     }
   }
 `;
@@ -67,29 +97,39 @@ const SERIES_QTY = gql`
 const ALL_SERIES = gql`
   query AllSeries {
     allSeries {
-      id
-      name
-      author {
-        writer {
+      series {
+        id
+        name
+        author {
+          writer {
+            id
+            name
+          }
+          illustrator {
+            id
+            name
+          }
+        }
+        publisher {
           id
           name
         }
-        illustrator {
+        printFormat {
           id
           name
+          description
         }
+        urlCover
+        isSingleVolume
       }
-      publisher {
-        id
-        name
+      pagination {
+        page
+        totalPages
+        totalEntries
+        offset
+        hasNextPage
+        nextPage
       }
-      printFormat {
-        id
-        name
-        description
-      }
-      urlCover
-      isSingleVolume
     }
   }
 `;
@@ -106,15 +146,25 @@ const VOLUME_QTY = gql`
 const ALL_VOLUMES = gql`
   query AllVolumes {
     allVolumes {
-      id
-      number
-      title
-      synopsis
-      urlCover
-      publicationDate
-      series {
+      volumes {
         id
-        name
+        number
+        title
+        synopsis
+        urlCover
+        publicationDate
+        series {
+          id
+          name
+        }
+      }
+      pagination {
+        page
+        totalPages
+        totalEntries
+        offset
+        hasNextPage
+        nextPage
       }
     }
   }

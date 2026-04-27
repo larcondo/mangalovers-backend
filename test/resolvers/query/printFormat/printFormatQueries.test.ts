@@ -2,6 +2,7 @@ import { prismaMock } from "@test/jest.setup";
 import printFormatQueries from "@/resolvers/query/printFormat";
 import { GraphQLError } from "graphql";
 import { printFormatSelect } from "@constants/index";
+import { PRINT_FORMATS_PAGE_LIMIT } from "@config/patination";
 
 describe("printFormat queries", () => {
   // Reset prismaMock beforeEach in jest.setup.ts
@@ -37,18 +38,30 @@ describe("printFormat queries", () => {
       { id: 3, name: "B6", description: null },
     ];
 
+    prismaMock.printFormat.count.mockResolvedValue(fakePrintFormats.length);
     prismaMock.printFormat.findMany.mockResolvedValue(fakePrintFormats as any);
 
-    const result = await printFormatQueries.allPrintFormats();
+    const result = await printFormatQueries.allPrintFormats(null, { page: 1 });
 
     expect(result).toBeDefined();
     if (result) {
-      expect(result.length).toBe(fakePrintFormats.length);
-      expect(result).toBe(fakePrintFormats);
+      const { printFormats, pagination } = result;
+      expect(pagination).toBeDefined();
+      expect(printFormats.length).toBe(fakePrintFormats.length);
+      expect(printFormats).toBe(fakePrintFormats);
+      expect(pagination.page).toBe(1);
+      expect(pagination.offset).toBe(0);
+      expect(pagination.totalPages).toBe(1);
+      expect(pagination.totalEntries).toBe(fakePrintFormats.length);
+      expect(pagination.hasNextPage).toBe(false);
+      expect(pagination.nextPage).toBeNull();
     }
+    expect(prismaMock.printFormat.count).toHaveBeenCalledTimes(1);
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledTimes(1);
     expect(prismaMock.printFormat.findMany).toHaveBeenCalledWith({
       select: printFormatSelect,
+      take: PRINT_FORMATS_PAGE_LIMIT,
+      skip: 0,
       orderBy: {
         createdAt: "desc",
       },
@@ -59,7 +72,7 @@ describe("printFormat queries", () => {
     prismaMock.printFormat.findMany.mockRejectedValue(null);
 
     try {
-      await printFormatQueries.allPrintFormats();
+      await printFormatQueries.allPrintFormats(null, { page: 1 });
     } catch (error) {
       expect(error).toBeInstanceOf(GraphQLError);
       const { message } = error as GraphQLError;
